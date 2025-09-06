@@ -17,43 +17,46 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Premium corporate blue-purple theme */
-    --primary: 241 89% 63%;
+    /* Modern premium gradient theme */
+    --primary: 280 100% 70%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 241 89% 75%;
-    --primary-dark: 241 89% 50%;
-    --primary-darker: 241 89% 35%;
+    --primary-light: 280 100% 80%;
+    --primary-dark: 280 100% 60%;
+    --primary-darker: 280 100% 45%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 320 45% 92%;
+    --secondary-foreground: 280 40% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 320 30% 95%;
+    --muted-foreground: 280 20% 50%;
 
-    --accent: 198 88% 55%;
+    --accent: 45 100% 65%;
     --accent-foreground: 0 0% 100%;
-    --accent-light: 198 88% 70%;
+    --accent-light: 45 100% 75%;
+    --accent-dark: 45 100% 55%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 241 89% 63%;
+    --border: 320 20% 88%;
+    --input: 320 20% 88%;
+    --ring: 280 100% 70%;
 
-    /* Premium gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-light)) 50%, hsl(var(--accent)) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary-darker)) 0%, hsl(var(--primary)) 50%, hsl(var(--primary-light)) 100%);
+    /* Stunning modern gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary-light)) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary-darker)) 0%, hsl(var(--primary)) 30%, hsl(var(--accent)) 70%, hsl(var(--accent-light)) 100%);
     --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--secondary)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--muted)/0.3) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--muted)/0.4) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--accent-light)) 100%);
+    --gradient-glow: radial-gradient(circle at 50% 50%, hsl(var(--primary)/0.3) 0%, transparent 70%);
 
-    /* Premium shadows */
-    --shadow-elegant: 0 20px 60px -10px hsl(var(--primary) / 0.25);
-    --shadow-card: 0 8px 30px -8px hsl(var(--primary) / 0.15);
-    --shadow-button: 0 8px 25px -4px hsl(var(--primary) / 0.35);
-    --shadow-glow: 0 0 50px hsl(var(--primary) / 0.4);
-    --shadow-soft: 0 4px 20px -4px hsl(var(--foreground) / 0.1);
+    /* Enhanced premium shadows */
+    --shadow-elegant: 0 25px 80px -15px hsl(var(--primary) / 0.4);
+    --shadow-card: 0 10px 40px -10px hsl(var(--primary) / 0.2);
+    --shadow-button: 0 10px 30px -5px hsl(var(--primary) / 0.4);
+    --shadow-glow: 0 0 80px hsl(var(--primary) / 0.6);
+    --shadow-soft: 0 6px 25px -6px hsl(var(--foreground) / 0.15);
+    --shadow-hero: 0 35px 100px -20px hsl(var(--primary) / 0.5);
 
     --radius: 1rem;
 
