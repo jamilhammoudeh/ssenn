@@ -56,6 +56,9 @@ const Navigation = () => {
                     ? "scale-x-100" 
                     : "scale-x-0 group-hover:scale-x-100"
                 }`}></div>
+                {!isActive(item.path) && (
+                  <div className="absolute -inset-2 bg-primary/5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+                )}
               </Link>
             ))}
           </div>
@@ -81,15 +84,15 @@ const Navigation = () => {
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div className="md:hidden animate-in slide-in-from-top-2 duration-300">
-            <div className="px-2 pt-4 pb-6 space-y-1 sm:px-3 bg-background/95 border-t border-primary/10 backdrop-blur-xl">
+            <div className="px-2 pt-4 pb-6 space-y-2 sm:px-3 bg-gradient-card border-t border-primary/10 rounded-b-2xl backdrop-blur-xl">
               {navItems.map((item, index) => (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`relative block px-4 py-4 text-base font-medium transition-all duration-300 group ${
+                  className={`block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg group ${
                     isActive(item.path)
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-primary"
+                      ? "text-primary bg-primary/10 shadow-card"
+                      : "text-muted-foreground hover:text-primary hover:bg-primary/5"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                   style={{ animationDelay: `${index * 50}ms` }}
@@ -97,11 +100,9 @@ const Navigation = () => {
                   <span className="relative z-10 group-hover:transform group-hover:translate-x-1 transition-transform duration-300">
                     {item.name}
                   </span>
-                  <div className={`absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-primary transform origin-left transition-all duration-300 ${
-                    isActive(item.path) 
-                      ? "scale-x-100" 
-                      : "scale-x-0 group-hover:scale-x-100"
-                  }`}></div>
+                  {isActive(item.path) && (
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-primary rounded-r-full"></div>
+                  )}
                 </Link>
               ))}
             </div>
