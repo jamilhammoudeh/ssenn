@@ -59,11 +59,9 @@ const Contact = () => {
   ];
 
   const inquiryTypes = [
-    { value: "partnership", label: "Partnership Opportunities" },
-    { value: "subsidiary", label: "Subsidiary Services" },
-    { value: "digital", label: "Digital Solutions" },
-    { value: "investment", label: "Investment Inquiries" },
-    { value: "general", label: "General Inquiry" }
+    { value: "brand", label: "Brand/Marketing Team" },
+    { value: "creator", label: "Content Creator/Influencer" },
+    { value: "agency", label: "Agency Partner" }
   ];
 
   return (
