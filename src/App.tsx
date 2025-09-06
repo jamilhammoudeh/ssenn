@@ -8,7 +8,6 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Subsidiaries from "./pages/Subsidiaries";
 import About from "./pages/About";
-import DigitalSolutions from "./pages/DigitalSolutions";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
@@ -27,7 +26,6 @@ const App = () => (
               <Route path="/" element={<Home />} />
               <Route path="/subsidiaries" element={<Subsidiaries />} />
               <Route path="/about" element={<About />} />
-              <Route path="/digital-solutions" element={<DigitalSolutions />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

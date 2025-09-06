@@ -11,23 +11,22 @@ const Navigation = () => {
     { name: "Home", path: "/" },
     { name: "Subsidiaries", path: "/subsidiaries" },
     { name: "About", path: "/about" },
-    { name: "Digital Solutions", path: "/digital-solutions" },
     { name: "Contact", path: "/contact" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
+    <nav className="bg-background/95 backdrop-blur-md border-b border-border/50 sticky top-0 z-50 shadow-soft">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <Link to="/" className="flex items-center space-x-3 group">
+            <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
               SSENN
             </div>
-            <span className="text-sm text-muted-foreground hidden sm:block">
-              Education
+            <span className="text-sm text-muted-foreground hidden sm:block font-medium">
+              Education Holdings
             </span>
           </Link>
 
@@ -37,16 +36,16 @@ const Navigation = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`text-sm font-medium transition-all duration-300 hover:text-primary hover:scale-105 ${
                   isActive(item.path)
-                    ? "text-primary"
+                    ? "text-primary font-semibold"
                     : "text-muted-foreground"
                 }`}
               >
                 {item.name}
               </Link>
             ))}
-            <Button variant="default" size="sm" className="shadow-button">
+            <Button variant="default" size="sm" className="shadow-button hover:shadow-glow">
               Get Started
             </Button>
           </div>
