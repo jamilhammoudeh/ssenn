@@ -1,62 +1,93 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Building2 } from "lucide-react";
+import { ArrowRight, Users, Target, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
-    <section className="relative py-24 md:py-32 bg-gradient-hero text-primary-foreground overflow-hidden">
-      {/* Subtle background decoration */}
+    <section className="relative bg-background py-20 md:py-28 overflow-hidden">
+      {/* Modern geometric background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10"></div>
-        <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-accent/10 rounded-full blur-2xl"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 via-background to-accent/5"></div>
+        <div className="absolute top-20 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl opacity-60"></div>
+        <div className="absolute bottom-20 left-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-40"></div>
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto">
-          {/* Simple icon */}
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/15 rounded-xl backdrop-blur-sm mb-8 shadow-card border border-white/20">
-            <Building2 className="w-8 h-8 text-white" />
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left column - Content */}
+          <div className="space-y-8">
+            <div className="space-y-6">
+              <div className="inline-flex items-center px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                <Target className="w-4 h-4 mr-2" />
+                Educational Excellence
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+                Transforming Education Through 
+                <span className="bg-gradient-primary bg-clip-text text-transparent"> Innovation</span>
+              </h1>
+              
+              <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
+                We build and nurture educational companies that create lasting impact through strategic innovation and forward-thinking solutions.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button 
+                asChild
+                size="lg" 
+                className="px-8 py-4 shadow-button hover:shadow-glow transition-all duration-300"
+              >
+                <Link to="/subsidiaries" className="flex items-center justify-center">
+                  View Our Portfolio
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button 
+                asChild
+                size="lg" 
+                variant="outline"
+                className="px-8 py-4 transition-all duration-300 hover:scale-105"
+              >
+                <Link to="/about" className="flex items-center justify-center">
+                  Our Story
+                </Link>
+              </Button>
+            </div>
           </div>
 
-          {/* Main headline */}
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight bg-gradient-to-r from-white to-white/90 bg-clip-text text-transparent">
-            Strategic Educational Excellence
-          </h1>
-
-          {/* Value proposition */}
-          <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed font-light">
-            Building the future through innovative educational initiatives and strategic digital solutions
-          </p>
-
-          {/* Description */}
-          <p className="text-base text-white/75 mb-10 leading-relaxed max-w-2xl mx-auto">
-            We are a forward-thinking holding corporation dedicated to fostering growth through our carefully curated portfolio of subsidiary companies, each specializing in creating meaningful educational impact.
-          </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
-              asChild
-              size="lg" 
-              variant="secondary"
-              className="px-8 py-3 shadow-button hover:shadow-glow transition-all duration-300 hover:scale-105 font-medium"
-            >
-              <Link to="/subsidiaries" className="flex items-center justify-center">
-                Explore Our Portfolio
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button 
-              asChild
-              size="lg" 
-              variant="outline"
-              className="px-8 py-3 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300 hover:scale-105 font-medium hover:border-white/50"
-            >
-              <Link to="/about" className="flex items-center justify-center">
-                Learn More
-              </Link>
-            </Button>
+          {/* Right column - Visual elements */}
+          <div className="relative lg:ml-8">
+            <div className="grid grid-cols-2 gap-6">
+              {/* Feature cards */}
+              <div className="space-y-6">
+                <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-card hover:shadow-glow transition-all duration-300 hover:scale-105">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+                    <Users className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">Strategic Partnerships</h3>
+                  <p className="text-sm text-muted-foreground">Building meaningful relationships that drive educational innovation</p>
+                </div>
+                
+                <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-card hover:shadow-glow transition-all duration-300 hover:scale-105 lg:mt-8">
+                  <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-4">
+                    <Target className="w-6 h-6 text-accent" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">Focused Growth</h3>
+                  <p className="text-sm text-muted-foreground">Carefully curated portfolio of high-impact educational ventures</p>
+                </div>
+              </div>
+              
+              <div className="space-y-6 lg:mt-8">
+                <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-card hover:shadow-glow transition-all duration-300 hover:scale-105">
+                  <div className="w-12 h-12 bg-gradient-primary/20 rounded-xl flex items-center justify-center mb-4">
+                    <Lightbulb className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">Innovation First</h3>
+                  <p className="text-sm text-muted-foreground">Pioneering solutions that reshape the educational landscape</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
