@@ -63,11 +63,15 @@ const Ihsaan = () => {
               We bridge the gap between premium brands and top-tier influencers, striving for excellence in all that we do and ensuring that our influence has a meaningful impact on society. We deliver authentic partnerships that drive real results. No guesswork. No wasted budgets. Just strategic influence that works.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="px-8 py-4 bg-white text-blue-700 hover:bg-white/90 font-semibold">
-                For Brands
+              <Button asChild size="lg" className="px-8 py-4 bg-white text-blue-700 hover:bg-white/90 font-semibold">
+                <Link to="/contact">
+                  For Brands
+                </Link>
               </Button>
-              <Button size="lg" variant="outline" className="px-8 py-4 border-white/30 text-white hover:bg-white/10 font-semibold">
-                For Influencers
+              <Button asChild size="lg" variant="outline" className="px-8 py-4 border-white/30 text-white hover:bg-white/10 font-semibold">
+                <Link to="/contact">
+                  For Influencers
+                </Link>
               </Button>
             </div>
           </div>
@@ -153,9 +157,11 @@ const Ihsaan = () => {
                 Let's discuss how Strategic Influence Ihsaan can help your brand connect with the right influencers for meaningful, results-driven campaigns.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="px-8 py-4 bg-white text-blue-700 hover:bg-white/90 font-semibold">
-                  <Mail className="mr-2 h-5 w-5" />
-                  Contact Our Team
+                <Button asChild size="lg" className="px-8 py-4 bg-white text-blue-700 hover:bg-white/90 font-semibold">
+                  <Link to="/contact">
+                    <Mail className="mr-2 h-5 w-5" />
+                    Contact Our Team
+                  </Link>
                 </Button>
                 <Button asChild size="lg" variant="outline" className="px-8 py-4 border-white/30 text-white hover:bg-white/10 font-semibold">
                   <Link to="/subsidiaries">
