@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 import { ArrowRight, Target, Users, TrendingUp, Shield, Search, BarChart3 } from "lucide-react";
 
 const Subsidiaries = () => {
@@ -137,9 +138,11 @@ const Subsidiaries = () => {
 
                 {/* CTA */}
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button variant="default" className="shadow-button">
-                    Learn More
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button asChild variant="default" className="shadow-button">
+                    <Link to="/ihsaan">
+                      Learn More
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
                   </Button>
                   <Button variant="outline">
                     Contact Team
