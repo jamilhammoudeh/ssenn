@@ -95,12 +95,6 @@ const Subsidiaries = () => {
                   </div>
                 </div>
 
-                {/* Description */}
-                <div className="mb-8">
-                  <p className="text-lg leading-relaxed text-foreground">
-                    {subsidiary.description}
-                  </p>
-                </div>
 
                 {/* Focus Areas */}
                 <div className="mb-8">
