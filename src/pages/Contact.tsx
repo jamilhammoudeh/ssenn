@@ -88,133 +88,101 @@ const Contact = () => {
       {/* Contact Form & Info */}
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-3 gap-16">
-            {/* Enhanced Contact Form */}
-            <div className="lg:col-span-2">
-              <Card className="shadow-elegant hover:shadow-glow transition-all duration-500 border-primary/10">
-                <CardContent className="p-10 md:p-14">
-                  <div className="mb-10">
-                    <h2 className="text-4xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
-                      Send us a Message
-                    </h2>
-                    <p className="text-muted-foreground text-lg leading-relaxed">
-                      Ready to start your next campaign or explore partnership opportunities? 
-                      We typically respond within 24 hours with detailed, personalized responses.
-                    </p>
-                  </div>
+          <div className="max-w-4xl mx-auto">
+            {/* Contact Form */}
+            <Card className="shadow-elegant hover:shadow-glow transition-all duration-500 border-primary/10">
+              <CardContent className="p-10 md:p-14">
+                <div className="mb-10">
+                  <h2 className="text-4xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
+                    Send us a Message
+                  </h2>
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    Ready to start your next campaign or explore partnership opportunities? 
+                    We typically respond within 24 hours with detailed, personalized responses.
+                  </p>
+                </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-8">
-                    <div className="grid md:grid-cols-2 gap-8">
-                      <div className="space-y-3">
-                        <Label htmlFor="name" className="text-base font-medium">Name *</Label>
-                        <Input
-                          id="name"
-                          type="text"
-                          placeholder="Your full name"
-                          value={formData.name}
-                          onChange={(e) => handleInputChange("name", e.target.value)}
-                          required
-                          className="h-12 text-base"
-                        />
-                      </div>
-                      <div className="space-y-3">
-                        <Label htmlFor="email" className="text-base font-medium">Email *</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="your@email.com"
-                          value={formData.email}
-                          onChange={(e) => handleInputChange("email", e.target.value)}
-                          required
-                          className="h-12 text-base"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-8">
-                      <div className="space-y-3">
-                        <Label htmlFor="company" className="text-base font-medium">Company/Organization</Label>
-                        <Input
-                          id="company"
-                          type="text"
-                          placeholder="Company name"
-                          value={formData.company}
-                          onChange={(e) => handleInputChange("company", e.target.value)}
-                          className="h-12 text-base"
-                        />
-                      </div>
-                      <div className="space-y-3">
-                        <Label htmlFor="subject" className="text-base font-medium">I am a...</Label>
-                        <Select onValueChange={(value) => handleInputChange("subject", value)}>
-                          <SelectTrigger className="h-12 text-base">
-                            <SelectValue placeholder="Select inquiry type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {inquiryTypes.map((type) => (
-                              <SelectItem key={type.value} value={type.value}>
-                                {type.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-3">
-                      <Label htmlFor="message" className="text-base font-medium">Message *</Label>
-                      <Textarea
-                        id="message"
-                        placeholder="Tell us about your goals, audience size, or campaign objectives..."
-                        value={formData.message}
-                        onChange={(e) => handleInputChange("message", e.target.value)}
-                        rows={8}
+                      <Label htmlFor="name" className="text-base font-medium">Name *</Label>
+                      <Input
+                        id="name"
+                        type="text"
+                        placeholder="Your full name"
+                        value={formData.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
                         required
-                        className="text-base resize-none"
+                        className="h-12 text-base"
                       />
                     </div>
-
-                    <Button 
-                      type="submit" 
-                      size="lg" 
-                      className="w-full shadow-button hover:shadow-glow transition-all duration-500 text-lg py-6"
-                    >
-                      Send Message
-                      <ArrowRight className="ml-3 h-5 w-5" />
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Enhanced Contact Information */}
-            <div className="space-y-10">
-              <div>
-                <h3 className="text-3xl font-bold mb-8 bg-gradient-primary bg-clip-text text-transparent">
-                  Let's Connect
-                </h3>
-                <p className="text-muted-foreground text-lg leading-relaxed mb-10">
-                  Ready to start your next campaign or explore partnership opportunities? 
-                  We pride ourselves on providing thoughtful, detailed responses to every inquiry.
-                </p>
-              </div>
-
-              {contactInfo.map((info, index) => (
-                <Card key={index} className="shadow-card hover:shadow-elegant transition-all duration-500 border-primary/10 hover:border-primary/20">
-                  <CardContent className="p-8">
-                    <div className="flex items-start gap-6">
-                      <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-button">
-                        <info.icon className="w-8 h-8 text-white" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-lg mb-2">{info.title}</h4>
-                        <p className="text-foreground text-lg mb-2 font-medium">{info.details}</p>
-                        <p className="text-muted-foreground leading-relaxed">{info.description}</p>
-                      </div>
+                    <div className="space-y-3">
+                      <Label htmlFor="email" className="text-base font-medium">Email *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="your@email.com"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        required
+                        className="h-12 text-base"
+                      />
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <Label htmlFor="company" className="text-base font-medium">Company/Channel</Label>
+                      <Input
+                        id="company"
+                        type="text"
+                        placeholder="Company name"
+                        value={formData.company}
+                        onChange={(e) => handleInputChange("company", e.target.value)}
+                        className="h-12 text-base"
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <Label htmlFor="subject" className="text-base font-medium">I am a...</Label>
+                      <Select onValueChange={(value) => handleInputChange("subject", value)}>
+                        <SelectTrigger className="h-12 text-base">
+                          <SelectValue placeholder="Select one" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {inquiryTypes.map((type) => (
+                            <SelectItem key={type.value} value={type.value}>
+                              {type.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label htmlFor="message" className="text-base font-medium">Message *</Label>
+                    <Textarea
+                      id="message"
+                      placeholder="Tell us about your goals, audience size, or campaign objectives..."
+                      value={formData.message}
+                      onChange={(e) => handleInputChange("message", e.target.value)}
+                      rows={8}
+                      required
+                      className="text-base resize-none"
+                    />
+                  </div>
+
+                  <Button 
+                    type="submit" 
+                    size="lg" 
+                    className="w-full shadow-button hover:shadow-glow transition-all duration-500 text-lg py-6"
+                  >
+                    Send Message
+                    <ArrowRight className="ml-3 h-5 w-5" />
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
