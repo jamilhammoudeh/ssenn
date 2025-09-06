@@ -182,9 +182,11 @@ const Subsidiaries = () => {
                   ))}
                 </div>
                 <div className="text-center mt-8">
-                  <Button variant="outline">
-                    Partnership Opportunities
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button asChild variant="outline">
+                    <Link to="/contact">
+                      Partnership Opportunities
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
                   </Button>
                 </div>
               </CardContent>

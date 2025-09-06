@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Mail, Phone, MapPin, Clock, ArrowRight, Building2, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -221,9 +222,11 @@ const Contact = () => {
                   humanity and maintain authentic engagement with your audience, 
                   we'd love to explore partnership opportunities with premium brands.
                 </p>
-                <Button variant="outline" className="text-lg px-8 py-4 hover:bg-primary/5">
-                  Join Our Network
-                  <ArrowRight className="ml-3 h-5 w-5" />
+                <Button asChild variant="outline" className="text-lg px-8 py-4 hover:bg-primary/5">
+                  <Link to="/contact">
+                    Join Our Network
+                    <ArrowRight className="ml-3 h-5 w-5" />
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
