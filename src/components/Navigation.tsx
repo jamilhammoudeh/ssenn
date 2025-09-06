@@ -83,26 +83,23 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden animate-in slide-in-from-top-2 duration-300">
-            <div className="px-2 pt-4 pb-6 space-y-2 sm:px-3 bg-gradient-card border-t border-primary/10 rounded-b-2xl backdrop-blur-xl">
-              {navItems.map((item, index) => (
+          <div className="md:hidden animate-in slide-in-from-top-2 duration-200">
+            <div className="px-4 pt-2 pb-4 space-y-1 border-t border-primary/10">
+              {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg group ${
+                  className={`relative block px-3 py-3 text-base font-medium transition-all duration-200 ${
                     isActive(item.path)
-                      ? "text-primary bg-primary/10 shadow-card"
-                      : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-primary"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <span className="relative z-10 group-hover:transform group-hover:translate-x-1 transition-transform duration-300">
-                    {item.name}
-                  </span>
-                  {isActive(item.path) && (
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-primary rounded-r-full"></div>
-                  )}
+                  {item.name}
+                  <div className={`absolute bottom-0 left-3 right-3 h-0.5 bg-gradient-primary transition-all duration-200 ${
+                    isActive(item.path) ? "scale-x-100" : "scale-x-0"
+                  }`}></div>
                 </Link>
               ))}
             </div>
