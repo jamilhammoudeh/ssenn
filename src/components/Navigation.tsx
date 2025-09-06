@@ -45,9 +45,6 @@ const Navigation = () => {
                 {item.name}
               </Link>
             ))}
-            <Button variant="default" size="sm" className="shadow-button hover:shadow-glow">
-              Get Started
-            </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -84,11 +81,6 @@ const Navigation = () => {
                   {item.name}
                 </Link>
               ))}
-              <div className="px-3 py-2">
-                <Button variant="default" size="sm" className="w-full shadow-button">
-                  Get Started
-                </Button>
-              </div>
             </div>
           </div>
         )}
