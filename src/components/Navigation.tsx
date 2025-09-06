@@ -22,12 +22,11 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
-              SSENN
-            </div>
-            <span className="text-sm text-muted-foreground hidden sm:block font-medium">
-              Education Holdings
-            </span>
+            <img 
+              src="/lovable-uploads/61b4b9a2-5d31-4536-a908-ef2b421fcc6c.png" 
+              alt="SSENN Education Holdings Logo" 
+              className="h-12 w-auto group-hover:scale-105 transition-transform duration-300"
+            />
           </Link>
 
           {/* Desktop Navigation */}
