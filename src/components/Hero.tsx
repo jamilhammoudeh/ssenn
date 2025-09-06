@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Hero = () => {
@@ -16,15 +16,14 @@ const Hero = () => {
         <div className="text-center max-w-5xl mx-auto">
           {/* Enhanced Logo/Brand */}
           <div className="mb-12">
-            <div className="inline-flex items-center justify-center mb-8 hover:scale-110 transition-all duration-500">
-              <img 
-                src="/lovable-uploads/61b4b9a2-5d31-4536-a908-ef2b421fcc6c.png" 
-                alt="SSENN Education Holdings Logo" 
-                className="h-32 w-auto md:h-40 lg:h-48 drop-shadow-2xl"
-              />
+            <div className="inline-flex items-center justify-center w-32 h-32 bg-white/10 rounded-full backdrop-blur-sm mb-8 shadow-glow hover:scale-110 transition-all duration-500">
+              <Building2 className="w-16 h-16 text-white drop-shadow-lg" />
             </div>
+            <h1 className="text-6xl md:text-8xl font-bold mb-6 tracking-tight leading-tight">
+              SSENN
+            </h1>
             <div className="text-2xl md:text-3xl text-white/95 mb-4 font-light">
-              Building Excellence in Education
+              Education Holdings
             </div>
           </div>
 
