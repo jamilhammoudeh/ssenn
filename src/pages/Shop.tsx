@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Filter } from "lucide-react";
 import { toast } from "sonner";
+import ProductDetailModal from "@/components/ProductDetailModal";
 
 interface Product {
   id: string;
@@ -13,6 +14,7 @@ interface Product {
   price: number;
   image_url: string;
   category: string;
+  created_at?: string;
 }
 
 const Shop = () => {
@@ -20,6 +22,8 @@ const Shop = () => {
   const [cart, setCart] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const categories = ["all", "Education", "Design", "Audio", "Business"];
 
@@ -59,7 +63,17 @@ const Shop = () => {
     toast.success("Removed from cart");
   };
 
-  const filteredProducts = selectedCategory === "all" 
+  const openProductModal = (product: Product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const closeProductModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  const filteredProducts = selectedCategory === "all"
     ? products 
     : products.filter(product => product.category === selectedCategory);
 
@@ -137,7 +151,11 @@ const Shop = () => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.map(product => (
-            <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card 
+              key={product.id} 
+              className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => openProductModal(product)}
+            >
               <div className="aspect-video bg-muted relative overflow-hidden">
                 {product.image_url ? (
                   <img 
@@ -168,7 +186,10 @@ const Shop = () => {
               <CardFooter>
                 <Button 
                   className="w-full" 
-                  onClick={() => addToCart(product)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToCart(product);
+                  }}
                   disabled={cart.some(item => item.id === product.id)}
                 >
                   {cart.some(item => item.id === product.id) ? "In Cart" : "Add to Cart"}
@@ -185,6 +206,14 @@ const Shop = () => {
             </p>
           </div>
         )}
+
+        <ProductDetailModal
+          product={selectedProduct}
+          isOpen={isModalOpen}
+          onClose={closeProductModal}
+          onAddToCart={addToCart}
+          isInCart={selectedProduct ? cart.some(item => item.id === selectedProduct.id) : false}
+        />
       </div>
     </div>
   );
