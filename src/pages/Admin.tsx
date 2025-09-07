@@ -73,7 +73,7 @@ const EnhancedAdmin = () => {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("products");
   
   const [formData, setFormData] = useState<ProductForm>({
     name: "",
@@ -84,11 +84,48 @@ const EnhancedAdmin = () => {
     is_active: true
   });
 
+  const [analytics, setAnalytics] = useState({
+    totalRevenue: 0,
+    totalOrders: 0,
+    avgOrderValue: 0,
+    topProducts: [] as any[]
+  });
+
   const categories = ["Education", "Design", "Audio", "Business"];
 
   useEffect(() => {
     fetchProducts();
+    fetchAnalytics();
   }, []);
+
+  const fetchAnalytics = async () => {
+    try {
+      // Fetch basic analytics data
+      const { data: orders } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("status", "paid");
+
+      const { data: popularProducts } = await supabase
+        .from("analytics_popular_products")
+        .select("*")
+        .limit(5);
+
+      if (orders) {
+        const revenue = orders.reduce((sum, order) => sum + (order.amount / 100), 0);
+        const avgOrder = orders.length > 0 ? revenue / orders.length : 0;
+        
+        setAnalytics({
+          totalRevenue: revenue,
+          totalOrders: orders.length,
+          avgOrderValue: avgOrder,
+          topProducts: popularProducts || []
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching analytics:", error);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
