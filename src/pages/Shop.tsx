@@ -15,6 +15,13 @@ interface Product {
   image_url: string;
   category: string;
   created_at?: string;
+  product_images?: Array<{
+    id: string;
+    image_url: string;
+    display_order: number;
+    is_primary: boolean;
+    alt_text?: string;
+  }>;
 }
 
 const Shop = () => {
@@ -35,7 +42,16 @@ const Shop = () => {
     try {
       const { data, error } = await supabase
         .from("products")
-        .select("*")
+        .select(`
+          *,
+          product_images (
+            id,
+            image_url,
+            display_order,
+            is_primary,
+            alt_text
+          )
+        `)
         .eq("is_active", true)
         .order("created_at", { ascending: false });
 
@@ -71,6 +87,11 @@ const Shop = () => {
   const closeProductModal = () => {
     setIsModalOpen(false);
     setSelectedProduct(null);
+  };
+
+  const getPrimaryImage = (product: Product) => {
+    const primaryImage = product.product_images?.find(img => img.is_primary);
+    return primaryImage?.image_url || product.image_url;
   };
 
   const filteredProducts = selectedCategory === "all"
@@ -157,9 +178,9 @@ const Shop = () => {
               onClick={() => openProductModal(product)}
             >
               <div className="aspect-video bg-muted relative overflow-hidden">
-                {product.image_url ? (
+                {getPrimaryImage(product) ? (
                   <img 
-                    src={product.image_url} 
+                    src={getPrimaryImage(product)} 
                     alt={product.name}
                     className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
                   />
@@ -171,6 +192,11 @@ const Shop = () => {
                 <Badge className="absolute top-2 right-2" variant="secondary">
                   {product.category}
                 </Badge>
+                {product.product_images && product.product_images.length > 1 && (
+                  <Badge className="absolute bottom-2 left-2 bg-background/80 text-foreground">
+                    {product.product_images.length} images
+                  </Badge>
+                )}
               </div>
               <CardHeader>
                 <CardTitle className="text-lg">{product.name}</CardTitle>
