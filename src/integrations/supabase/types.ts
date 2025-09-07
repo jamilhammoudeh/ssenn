@@ -17,32 +17,41 @@ export type Database = {
       downloads: {
         Row: {
           created_at: string
+          customer_email: string | null
           download_count: number
+          download_size_mb: number | null
           expires_at: string | null
           id: string
           max_downloads: number
           order_id: string | null
           product_id: string | null
+          product_name: string | null
           user_id: string | null
         }
         Insert: {
           created_at?: string
+          customer_email?: string | null
           download_count?: number
+          download_size_mb?: number | null
           expires_at?: string | null
           id?: string
           max_downloads?: number
           order_id?: string | null
           product_id?: string | null
+          product_name?: string | null
           user_id?: string | null
         }
         Update: {
           created_at?: string
+          customer_email?: string | null
           download_count?: number
+          download_size_mb?: number | null
           expires_at?: string | null
           id?: string
           max_downloads?: number
           order_id?: string | null
           product_id?: string | null
+          product_name?: string | null
           user_id?: string | null
         }
         Relationships: [
@@ -66,8 +75,11 @@ export type Database = {
         Row: {
           amount: number
           created_at: string
+          customer_email: string | null
+          customer_name: string | null
           id: string
           product_id: string | null
+          product_name: string | null
           status: string
           stripe_session_id: string | null
           updated_at: string
@@ -76,8 +88,11 @@ export type Database = {
         Insert: {
           amount: number
           created_at?: string
+          customer_email?: string | null
+          customer_name?: string | null
           id?: string
           product_id?: string | null
+          product_name?: string | null
           status?: string
           stripe_session_id?: string | null
           updated_at?: string
@@ -86,8 +101,11 @@ export type Database = {
         Update: {
           amount?: number
           created_at?: string
+          customer_email?: string | null
+          customer_name?: string | null
           id?: string
           product_id?: string | null
+          product_name?: string | null
           status?: string
           stripe_session_id?: string | null
           updated_at?: string
@@ -182,7 +200,52 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      analytics_downloads: {
+        Row: {
+          avg_downloads_per_user: number | null
+          product_id: string | null
+          product_name: string | null
+          total_data_transferred_mb: number | null
+          total_downloads: number | null
+          unique_downloaders: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "downloads_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_popular_products: {
+        Row: {
+          avg_price: number | null
+          product_id: string | null
+          product_name: string | null
+          sales_count: number | null
+          total_revenue: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_sales: {
+        Row: {
+          avg_order_value: number | null
+          order_count: number | null
+          revenue: number | null
+          sale_date: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
