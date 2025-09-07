@@ -13,7 +13,7 @@ import Contact from "./pages/Contact";
 import Ihsaan from "./pages/Ihsaan";
 import Shop from "./pages/Shop";
 import Admin from "./pages/Admin";
-import BusinessIntelligence from "./pages/BusinessIntelligence";
+import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,7 +35,7 @@ const App = () => (
               <Route path="/ihsaan" element={<Ihsaan />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path="/analytics" element={<BusinessIntelligence />} />
+              <Route path="/analytics" element={<Analytics />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
