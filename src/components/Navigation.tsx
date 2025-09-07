@@ -12,6 +12,7 @@ const Navigation = () => {
     { name: "Subsidiaries", path: "/subsidiaries" },
     { name: "About", path: "/about" },
     { name: "Shop", path: "/shop" },
+    { name: "Admin", path: "/admin" },
     { name: "Contact", path: "/contact" },
   ];
 
