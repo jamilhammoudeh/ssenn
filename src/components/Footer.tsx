@@ -8,7 +8,7 @@ const Footer = () => {
     company: [
       { name: "About", path: "/about" },
       { name: "Subsidiaries", path: "/subsidiaries" },
-      { name: "Digital Solutions", path: "/digital-solutions" },
+      { name: "Shop", path: "/shop" },
       { name: "Contact", path: "/contact" }
     ],
     subsidiaries: [
