@@ -915,15 +915,15 @@ const EnhancedAdmin = () => {
             <div className="flex flex-col md:flex-row gap-4 mb-6">
               <div className="flex-1">
                 <h2 className="text-2xl font-bold mb-2">Order Management</h2>
-                <p className="text-muted-foreground">View and manage customer orders</p>
+                <p className="text-muted-foreground">Manage customer orders and fulfillment</p>
               </div>
               
               <div className="flex flex-col md:flex-row gap-2">
                 <Input
-                  placeholder="Search orders..."
+                  placeholder="Search by customer, email, or order ID..."
                   value={orderSearch}
                   onChange={(e) => setOrderSearch(e.target.value)}
-                  className="md:w-64"
+                  className="md:w-80"
                 />
                 <Select value={orderStatusFilter} onValueChange={setOrderStatusFilter}>
                   <SelectTrigger className="md:w-40">
@@ -940,62 +940,113 @@ const EnhancedAdmin = () => {
               </div>
             </div>
 
-            {/* Orders Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <Card className="border-primary/20 shadow-elegant">
+            {/* Quick Stats (Management focused) */}
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+              <Card className="border-amber-200 bg-amber-50 dark:bg-amber-950 dark:border-amber-800">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Total Orders</p>
-                      <p className="text-2xl font-bold">{orders.length}</p>
-                    </div>
-                    <Package className="w-6 h-6 text-primary" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-primary/20 shadow-elegant">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Paid Orders</p>
-                      <p className="text-2xl font-bold text-green-600">
-                        {orders.filter(o => o.status === 'paid').length}
-                      </p>
-                    </div>
-                    <BarChart3 className="w-6 h-6 text-green-600" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-primary/20 shadow-elegant">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Pending Orders</p>
-                      <p className="text-2xl font-bold text-yellow-600">
+                      <p className="text-sm text-amber-700 dark:text-amber-300">Pending</p>
+                      <p className="text-xl font-bold text-amber-800 dark:text-amber-200">
                         {orders.filter(o => o.status === 'pending').length}
                       </p>
                     </div>
-                    <Calendar className="w-6 h-6 text-yellow-600" />
+                    <Calendar className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border-primary/20 shadow-elegant">
+              <Card className="border-green-200 bg-green-50 dark:bg-green-950 dark:border-green-800">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Total Revenue</p>
-                      <p className="text-2xl font-bold text-green-600">
-                        ${orders.filter(o => o.status === 'paid').reduce((sum, o) => sum + (o.amount / 100), 0).toFixed(2)}
+                      <p className="text-sm text-green-700 dark:text-green-300">Paid</p>
+                      <p className="text-xl font-bold text-green-800 dark:text-green-200">
+                        {orders.filter(o => o.status === 'paid').length}
                       </p>
                     </div>
-                    <DollarSign className="w-6 h-6 text-green-600" />
+                    <Package className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-red-200 bg-red-50 dark:bg-red-950 dark:border-red-800">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-red-700 dark:text-red-300">Cancelled</p>
+                      <p className="text-xl font-bold text-red-800 dark:text-red-200">
+                        {orders.filter(o => o.status === 'cancelled').length}
+                      </p>
+                    </div>
+                    <X className="w-5 h-5 text-red-600 dark:text-red-400" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-gray-200 bg-gray-50 dark:bg-gray-950 dark:border-gray-800">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">Refunded</p>
+                      <p className="text-xl font-bold text-gray-800 dark:text-gray-200">
+                        {orders.filter(o => o.status === 'refunded').length}
+                      </p>
+                    </div>
+                    <TrendingUp className="w-5 h-5 text-gray-600 dark:text-gray-400 rotate-180" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-800">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-blue-700 dark:text-blue-300">Total</p>
+                      <p className="text-xl font-bold text-blue-800 dark:text-blue-200">
+                        {orders.length}
+                      </p>
+                    </div>
+                    <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   </div>
                 </CardContent>
               </Card>
             </div>
+
+            {/* Bulk Actions */}
+            {filteredOrders.length > 0 && (
+              <Card className="mb-6 border-primary/20">
+                <CardContent className="p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-sm font-medium">Quick Actions:</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const pendingOrders = filteredOrders.filter(o => o.status === 'pending');
+                        pendingOrders.forEach(order => updateOrderStatus(order.id, 'paid'));
+                      }}
+                      disabled={!filteredOrders.some(o => o.status === 'pending')}
+                    >
+                      Mark All Pending as Paid
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const orderData = filteredOrders.map(o => 
+                          `${o.id.slice(-8)},${o.customer_name || 'N/A'},${o.customer_email},${o.product_name},${(o.amount/100).toFixed(2)},${o.status},${new Date(o.created_at).toLocaleDateString()}`
+                        ).join('\n');
+                        navigator.clipboard.writeText(`Order ID,Customer,Email,Product,Amount,Status,Date\n${orderData}`);
+                        toast.success("Order data copied to clipboard");
+                      }}
+                    >
+                      Export Filtered Orders
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Orders Table */}
             {orderLoading ? (
@@ -1018,41 +1069,49 @@ const EnhancedAdmin = () => {
             ) : (
               <div className="space-y-4">
                 {filteredOrders.map((order) => (
-                  <Card key={order.id} className="border-primary/10 hover:shadow-lg transition-all duration-300">
+                  <Card key={order.id} className="border-primary/10 hover:shadow-lg transition-all duration-300 group">
                     <CardContent className="p-6">
-                      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-start">
+                      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-start">
                         {/* Order Info */}
                         <div className="lg:col-span-2">
-                          <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-start justify-between mb-3">
                             <div>
-                              <h3 className="font-semibold text-lg">{order.product_name}</h3>
-                              <p className="text-sm text-muted-foreground font-mono">
-                                Order #{order.id.slice(-8).toUpperCase()}
+                              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                                {order.product_name}
+                              </h3>
+                              <p className="text-sm text-muted-foreground font-mono bg-muted/50 px-2 py-1 rounded inline-block">
+                                #{order.id.slice(-8).toUpperCase()}
                               </p>
                             </div>
-                            <Badge className={`${getOrderStatusColor(order.status)} border-0`}>
+                            <Badge className={`${getOrderStatusColor(order.status)} border-0 font-medium`}>
                               {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                             </Badge>
                           </div>
                           
-                          <div className="space-y-1 text-sm">
+                          <div className="space-y-2 text-sm">
                             <div className="flex items-center gap-2">
                               <Users className="w-4 h-4 text-muted-foreground" />
-                              <span>{order.customer_name || 'N/A'}</span>
+                              <span className="font-medium">{order.customer_name || 'No name provided'}</span>
                             </div>
                             <div className="flex items-center gap-2">
                               <span className="text-muted-foreground">✉</span>
-                              <span>{order.customer_email}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4 text-muted-foreground" />
-                              <span>{new Date(order.created_at).toLocaleDateString()} at {new Date(order.created_at).toLocaleTimeString()}</span>
+                              <span className="text-primary hover:underline cursor-pointer" 
+                                    onClick={() => window.location.href = `mailto:${order.customer_email}`}>
+                                {order.customer_email}
+                              </span>
                             </div>
                           </div>
                         </div>
 
+                        {/* Order Details */}
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-1">Order Date</p>
+                          <p className="font-medium">{new Date(order.created_at).toLocaleDateString()}</p>
+                          <p className="text-xs text-muted-foreground">{new Date(order.created_at).toLocaleTimeString()}</p>
+                        </div>
+
                         {/* Amount */}
-                        <div className="text-center lg:text-left">
+                        <div>
                           <p className="text-sm text-muted-foreground mb-1">Amount</p>
                           <p className="text-2xl font-bold text-green-600">
                             ${(order.amount / 100).toFixed(2)}
@@ -1069,23 +1128,36 @@ const EnhancedAdmin = () => {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="pending">Pending</SelectItem>
-                              <SelectItem value="paid">Paid</SelectItem>
-                              <SelectItem value="cancelled">Cancelled</SelectItem>
-                              <SelectItem value="refunded">Refunded</SelectItem>
+                              <SelectItem value="pending">⏳ Pending</SelectItem>
+                              <SelectItem value="paid">✅ Paid</SelectItem>
+                              <SelectItem value="cancelled">❌ Cancelled</SelectItem>
+                              <SelectItem value="refunded">↩️ Refunded</SelectItem>
                             </SelectContent>
                           </Select>
                           
-                          {order.stripe_session_id && (
+                          <div className="flex gap-1">
                             <Button 
                               variant="outline" 
                               size="sm"
-                              onClick={() => navigator.clipboard.writeText(order.stripe_session_id)}
-                              className="text-xs"
+                              onClick={() => navigator.clipboard.writeText(order.id)}
+                              className="text-xs flex-1"
                             >
-                              Copy Session ID
+                              Copy ID
                             </Button>
-                          )}
+                            {order.stripe_session_id && (
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(order.stripe_session_id);
+                                  toast.success("Session ID copied");
+                                }}
+                                className="text-xs flex-1"
+                              >
+                                Stripe ID
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </CardContent>
