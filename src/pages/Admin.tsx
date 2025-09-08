@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Switch } from "@/components/ui/switch";
 import { 
   Plus, 
   Edit, 
@@ -29,7 +30,11 @@ import {
   Download,
   TrendingUp,
   Calendar,
-  DollarSign
+  DollarSign,
+  Tag,
+  Search,
+  Percent,
+  Copy
 } from "lucide-react";
 import { toast } from "sonner";
 import { 
@@ -46,6 +51,8 @@ import {
   Pie,
   Cell
 } from 'recharts';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 interface ProductImage {
   id: string;
@@ -82,6 +89,9 @@ interface ProductForm {
   category: string;
   digital_file_url: string;
   is_active: boolean;
+  meta_description: string;
+  meta_keywords: string[];
+  seo_slug: string;
 }
 
 const EnhancedAdmin = () => {
@@ -93,6 +103,7 @@ const EnhancedAdmin = () => {
   const [uploading, setUploading] = useState(false);
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
   const [activeTab, setActiveTab] = useState("products");
+  const [keywordsInput, setKeywordsInput] = useState("");
   
   const [formData, setFormData] = useState<ProductForm>({
     name: "",
@@ -100,7 +111,10 @@ const EnhancedAdmin = () => {
     price: "",
     category: "",
     digital_file_url: "",
-    is_active: true
+    is_active: true,
+    meta_description: "",
+    meta_keywords: [],
+    seo_slug: ""
   });
 
   const [analytics, setAnalytics] = useState({
@@ -126,12 +140,26 @@ const EnhancedAdmin = () => {
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
   const [orderLoading, setOrderLoading] = useState(false);
 
+  // Discount codes state
+  const [discountCodes, setDiscountCodes] = useState<any[]>([]);
+  const [discountDialogOpen, setDiscountDialogOpen] = useState(false);
+  const [editingDiscount, setEditingDiscount] = useState<any>(null);
+  const [discountForm, setDiscountForm] = useState({
+    code: "",
+    type: "percentage",
+    value: "",
+    min_order_amount: "",
+    max_uses: "",
+    expires_at: ""
+  });
+
   const categories = ["Education", "Design", "Audio", "Business"];
 
   useEffect(() => {
     fetchProducts();
     fetchFullAnalytics();
     fetchOrders();
+    fetchDiscountCodes();
   }, [dateFilter]);
 
   const fetchFullAnalytics = async () => {
@@ -280,6 +308,114 @@ const EnhancedAdmin = () => {
     return matchesSearch && matchesStatus;
   });
 
+  // Discount code functions
+  const handleDiscountSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!discountForm.code || !discountForm.value) {
+      toast.error("Please fill in required fields");
+      return;
+    }
+
+    try {
+      const discountData = {
+        code: discountForm.code.toUpperCase(),
+        type: discountForm.type,
+        value: parseFloat(discountForm.value),
+        min_order_amount: discountForm.min_order_amount ? parseFloat(discountForm.min_order_amount) : 0,
+        max_uses: discountForm.max_uses ? parseInt(discountForm.max_uses) : null,
+        expires_at: discountForm.expires_at || null
+      };
+
+      if (editingDiscount) {
+        const { error } = await supabase
+          .from("discount_codes")
+          .update(discountData)
+          .eq("id", editingDiscount.id);
+        if (error) throw error;
+        toast.success("Discount code updated successfully");
+      } else {
+        const { error } = await supabase
+          .from("discount_codes")
+          .insert([discountData]);
+        if (error) throw error;
+        toast.success("Discount code created successfully");
+      }
+
+      setDiscountDialogOpen(false);
+      resetDiscountForm();
+      fetchDiscountCodes();
+    } catch (error) {
+      console.error("Error saving discount code:", error);
+      toast.error("Failed to save discount code");
+    }
+  };
+
+  const resetDiscountForm = () => {
+    setDiscountForm({
+      code: "",
+      type: "percentage",
+      value: "",
+      min_order_amount: "",
+      max_uses: "",
+      expires_at: ""
+    });
+    setEditingDiscount(null);
+  };
+
+  const handleEditDiscount = (discount: any) => {
+    setEditingDiscount(discount);
+    setDiscountForm({
+      code: discount.code,
+      type: discount.type,
+      value: discount.value.toString(),
+      min_order_amount: discount.min_order_amount?.toString() || "",
+      max_uses: discount.max_uses?.toString() || "",
+      expires_at: discount.expires_at ? discount.expires_at.split('T')[0] : ""
+    });
+    setDiscountDialogOpen(true);
+  };
+
+  const deleteDiscountCode = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this discount code?")) return;
+
+    try {
+      const { error } = await supabase
+        .from("discount_codes")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+      toast.success("Discount code deleted successfully");
+      fetchDiscountCodes();
+    } catch (error) {
+      console.error("Error deleting discount code:", error);
+      toast.error("Failed to delete discount code");
+    }
+  };
+
+  const toggleDiscountStatus = async (id: string, currentStatus: boolean) => {
+    try {
+      const { error } = await supabase
+        .from("discount_codes")
+        .update({ is_active: !currentStatus })
+        .eq("id", id);
+
+      if (error) throw error;
+      toast.success(`Discount code ${!currentStatus ? 'activated' : 'deactivated'}`);
+      fetchDiscountCodes();
+    } catch (error) {
+      console.error("Error updating discount status:", error);
+      toast.error("Failed to update discount status");
+    }
+  };
+
+  const handleKeywordsChange = (value: string) => {
+    setKeywordsInput(value);
+    const keywords = value.split(',').map(k => k.trim()).filter(k => k.length > 0);
+    setFormData({ ...formData, meta_keywords: keywords });
+  };
+
   const fetchProducts = async () => {
     try {
       const { data, error } = await supabase
@@ -303,6 +439,21 @@ const EnhancedAdmin = () => {
       toast.error("Failed to load products");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchDiscountCodes = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("discount_codes")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setDiscountCodes(data || []);
+    } catch (error) {
+      console.error("Error fetching discount codes:", error);
+      toast.error("Failed to load discount codes");
     }
   };
 
@@ -361,13 +512,22 @@ const EnhancedAdmin = () => {
     try {
       setUploading(true);
 
+      // Generate SEO slug if not provided
+      const slug = formData.seo_slug || formData.name.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .trim();
+
       const productData = {
         name: formData.name,
         description: formData.description,
         price: parseFloat(formData.price),
         category: formData.category,
         digital_file_url: formData.digital_file_url,
-        is_active: formData.is_active
+        is_active: formData.is_active,
+        meta_description: formData.meta_description,
+        meta_keywords: formData.meta_keywords,
+        seo_slug: slug
       };
 
       let productId: string;
@@ -417,8 +577,12 @@ const EnhancedAdmin = () => {
       price: product.price.toString(),
       category: product.category,
       digital_file_url: product.digital_file_url || "",
-      is_active: product.is_active
+      is_active: product.is_active,
+      meta_description: (product as any).meta_description || "",
+      meta_keywords: (product as any).meta_keywords || [],
+      seo_slug: (product as any).seo_slug || ""
     });
+    setKeywordsInput((product as any).meta_keywords?.join(", ") || "");
 
     // Fetch product images
     const { data: images } = await supabase
@@ -505,8 +669,12 @@ const EnhancedAdmin = () => {
       price: "",
       category: "",
       digital_file_url: "",
-      is_active: true
+      is_active: true,
+      meta_description: "",
+      meta_keywords: [],
+      seo_slug: ""
     });
+    setKeywordsInput("");
     setEditingProduct(null);
     setImageFiles([]);
     setProductImages([]);
@@ -579,8 +747,9 @@ const EnhancedAdmin = () => {
               </DialogHeader>
               
               <Tabs defaultValue="details" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="details">Product Details</TabsTrigger>
+                  <TabsTrigger value="seo">SEO Settings</TabsTrigger>
                   <TabsTrigger value="images">Images</TabsTrigger>
                 </TabsList>
                 
@@ -617,14 +786,27 @@ const EnhancedAdmin = () => {
 
                     <div className="space-y-2">
                       <Label htmlFor="description">Description *</Label>
-                      <Textarea
-                        id="description"
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        placeholder="Enter product description"
-                        rows={4}
-                        required
-                      />
+                      <div className="border rounded-md">
+                        <ReactQuill
+                          value={formData.description}
+                          onChange={(value) => setFormData({ ...formData, description: value })}
+                          modules={{
+                            toolbar: [
+                              [{ 'header': [1, 2, 3, false] }],
+                              ['bold', 'italic', 'underline', 'strike'],
+                              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                              ['link', 'image'],
+                              ['clean']
+                            ],
+                          }}
+                          formats={[
+                            'header', 'bold', 'italic', 'underline', 'strike',
+                            'list', 'bullet', 'link', 'image'
+                          ]}
+                          placeholder="Enter product description with rich text formatting..."
+                          style={{ minHeight: '150px' }}
+                        />
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -815,9 +997,10 @@ const EnhancedAdmin = () => {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="discounts">Discount Codes</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
 
@@ -1165,6 +1348,244 @@ const EnhancedAdmin = () => {
                 ))}
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="discounts" className="mt-6">
+            {/* Discount Codes Header */}
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold mb-2">Discount Codes</h2>
+                <p className="text-muted-foreground">Create and manage discount codes for your store</p>
+              </div>
+              
+              <Dialog open={discountDialogOpen} onOpenChange={setDiscountDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button onClick={() => setDiscountDialogOpen(true)} className="shadow-elegant">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Discount Code
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>
+                      {editingDiscount ? "Edit Discount Code" : "Create New Discount Code"}
+                    </DialogTitle>
+                  </DialogHeader>
+                  
+                  <form onSubmit={handleDiscountSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="code">Discount Code *</Label>
+                        <Input
+                          id="code"
+                          value={discountForm.code}
+                          onChange={(e) => setDiscountForm({ ...discountForm, code: e.target.value.toUpperCase() })}
+                          placeholder="SAVE20"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="type">Discount Type *</Label>
+                        <Select value={discountForm.type} onValueChange={(value) => setDiscountForm({ ...discountForm, type: value })}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="percentage">Percentage (%)</SelectItem>
+                            <SelectItem value="fixed">Fixed Amount ($)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="value">
+                          Discount Value * {discountForm.type === 'percentage' ? '(%)' : '($)'}
+                        </Label>
+                        <Input
+                          id="value"
+                          type="number"
+                          step={discountForm.type === 'percentage' ? '1' : '0.01'}
+                          min="0"
+                          max={discountForm.type === 'percentage' ? '100' : undefined}
+                          value={discountForm.value}
+                          onChange={(e) => setDiscountForm({ ...discountForm, value: e.target.value })}
+                          placeholder={discountForm.type === 'percentage' ? '20' : '10.00'}
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="min_order_amount">Minimum Order Amount ($)</Label>
+                        <Input
+                          id="min_order_amount"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={discountForm.min_order_amount}
+                          onChange={(e) => setDiscountForm({ ...discountForm, min_order_amount: e.target.value })}
+                          placeholder="0.00"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="max_uses">Maximum Uses</Label>
+                        <Input
+                          id="max_uses"
+                          type="number"
+                          min="1"
+                          value={discountForm.max_uses}
+                          onChange={(e) => setDiscountForm({ ...discountForm, max_uses: e.target.value })}
+                          placeholder="Unlimited"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="expires_at">Expiry Date</Label>
+                        <Input
+                          id="expires_at"
+                          type="date"
+                          value={discountForm.expires_at}
+                          onChange={(e) => setDiscountForm({ ...discountForm, expires_at: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end space-x-2">
+                      <Button type="button" variant="outline" onClick={() => {
+                        setDiscountDialogOpen(false);
+                        resetDiscountForm();
+                      }}>
+                        Cancel
+                      </Button>
+                      <Button type="submit">
+                        {editingDiscount ? "Update Code" : "Create Code"}
+                      </Button>
+                    </div>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            {/* Discount Codes List */}
+            <div className="space-y-4">
+              {discountCodes.map((discount) => (
+                <Card key={discount.id} className="border-primary/10 hover:shadow-lg transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-start">
+                      {/* Code Info */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="font-bold text-lg font-mono">{discount.code}</h3>
+                          <Badge variant={discount.is_active ? "default" : "secondary"}>
+                            {discount.is_active ? "Active" : "Inactive"}
+                          </Badge>
+                        </div>
+                        <div className="space-y-1 text-sm">
+                          <div className="flex items-center gap-2">
+                            {discount.type === 'percentage' ? <Percent className="w-4 h-4" /> : <DollarSign className="w-4 h-4" />}
+                            <span>
+                              {discount.type === 'percentage' 
+                                ? `${discount.value}% off`
+                                : `$${discount.value} off`
+                              }
+                            </span>
+                          </div>
+                          {discount.min_order_amount > 0 && (
+                            <p className="text-muted-foreground">
+                              Min. order: ${discount.min_order_amount}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Usage Stats */}
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-1">Usage</p>
+                        <p className="text-lg font-semibold">
+                          {discount.used_count || 0}
+                          {discount.max_uses && ` / ${discount.max_uses}`}
+                        </p>
+                      </div>
+
+                      {/* Expiry */}
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-1">Expires</p>
+                        <p className="text-sm">
+                          {discount.expires_at 
+                            ? new Date(discount.expires_at).toLocaleDateString()
+                            : "Never"
+                          }
+                        </p>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex flex-col gap-2">
+                        <div className="flex gap-1">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEditDiscount(discount)}
+                            className="flex-1"
+                          >
+                            <Edit className="w-3 h-3 mr-1" />
+                            Edit
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              navigator.clipboard.writeText(discount.code);
+                              toast.success("Code copied to clipboard");
+                            }}
+                            className="flex-1"
+                          >
+                            <Copy className="w-3 h-3 mr-1" />
+                            Copy
+                          </Button>
+                        </div>
+                        <div className="flex gap-1">
+                          <Button 
+                            variant={discount.is_active ? "secondary" : "default"}
+                            size="sm"
+                            onClick={() => toggleDiscountStatus(discount.id, discount.is_active)}
+                            className="flex-1"
+                          >
+                            {discount.is_active ? "Deactivate" : "Activate"}
+                          </Button>
+                          <Button 
+                            variant="destructive" 
+                            size="sm"
+                            onClick={() => deleteDiscountCode(discount.id)}
+                            className="flex-1"
+                          >
+                            <Trash2 className="w-3 h-3 mr-1" />
+                            Delete
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+
+              {discountCodes.length === 0 && (
+                <div className="text-center py-12">
+                  <Tag className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-muted-foreground text-lg mb-4">
+                    No discount codes created yet
+                  </p>
+                  <Button onClick={() => setDiscountDialogOpen(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Your First Discount Code
+                  </Button>
+                </div>
+              )}
+            </div>
           </TabsContent>
 
           <TabsContent value="analytics" className="mt-6">

@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      discount_codes: {
+        Row: {
+          code: string
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          max_uses: number | null
+          min_order_amount: number | null
+          type: string
+          updated_at: string | null
+          used_count: number | null
+          value: number
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_uses?: number | null
+          min_order_amount?: number | null
+          type: string
+          updated_at?: string | null
+          used_count?: number | null
+          value: number
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_uses?: number | null
+          min_order_amount?: number | null
+          type?: string
+          updated_at?: string | null
+          used_count?: number | null
+          value?: number
+        }
+        Relationships: []
+      }
       downloads: {
         Row: {
           created_at: string
@@ -168,8 +210,11 @@ export type Database = {
           id: string
           image_url: string | null
           is_active: boolean
+          meta_description: string | null
+          meta_keywords: string[] | null
           name: string
           price: number
+          seo_slug: string | null
           updated_at: string
         }
         Insert: {
@@ -180,8 +225,11 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean
+          meta_description?: string | null
+          meta_keywords?: string[] | null
           name: string
           price: number
+          seo_slug?: string | null
           updated_at?: string
         }
         Update: {
@@ -192,8 +240,11 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean
+          meta_description?: string | null
+          meta_keywords?: string[] | null
           name?: string
           price?: number
+          seo_slug?: string | null
           updated_at?: string
         }
         Relationships: []
