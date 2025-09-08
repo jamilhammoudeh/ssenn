@@ -51,8 +51,7 @@ import {
   Pie,
   Cell
 } from 'recharts';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import RichTextEditor from '@/components/RichTextEditor';
 
 interface ProductImage {
   id: string;
@@ -784,30 +783,13 @@ const EnhancedAdmin = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="description">Description *</Label>
-                      <div className="border rounded-md">
-                        <ReactQuill
-                          value={formData.description}
-                          onChange={(value) => setFormData({ ...formData, description: value })}
-                          modules={{
-                            toolbar: [
-                              [{ 'header': [1, 2, 3, false] }],
-                              ['bold', 'italic', 'underline', 'strike'],
-                              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                              ['link', 'image'],
-                              ['clean']
-                            ],
-                          }}
-                          formats={[
-                            'header', 'bold', 'italic', 'underline', 'strike',
-                            'list', 'bullet', 'link', 'image'
-                          ]}
-                          placeholder="Enter product description with rich text formatting..."
-                          style={{ minHeight: '150px' }}
-                        />
-                      </div>
-                    </div>
+                    <RichTextEditor
+                      value={formData.description}
+                      onChange={(value) => setFormData({ ...formData, description: value })}
+                      placeholder="Enter product description with rich text formatting..."
+                      label="Description"
+                      required
+                    />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
