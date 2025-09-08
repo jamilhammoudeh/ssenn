@@ -24,9 +24,28 @@ import {
   Eye,
   Settings,
   Package,
-  BarChart3
+  BarChart3,
+  Users,
+  Download,
+  TrendingUp,
+  Calendar,
+  DollarSign
 } from "lucide-react";
 import { toast } from "sonner";
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell
+} from 'recharts';
 
 interface ProductImage {
   id: string;
@@ -91,25 +110,78 @@ const EnhancedAdmin = () => {
     topProducts: [] as any[]
   });
 
+  // Full analytics state
+  const [salesData, setSalesData] = useState<any[]>([]);
+  const [popularProducts, setPopularProducts] = useState<any[]>([]);
+  const [downloadData, setDownloadData] = useState<any[]>([]);
+  const [dateFilter, setDateFilter] = useState("7d");
+  const [totalDownloads, setTotalDownloads] = useState(0);
+  const [uniqueDownloaders, setUniqueDownloaders] = useState(0);
+  const [totalDataTransferred, setTotalDataTransferred] = useState(0);
+  const [avgDownloadsPerUser, setAvgDownloadsPerUser] = useState(0);
+
   const categories = ["Education", "Design", "Audio", "Business"];
 
   useEffect(() => {
     fetchProducts();
-    fetchAnalytics();
-  }, []);
+    fetchFullAnalytics();
+  }, [dateFilter]);
 
-  const fetchAnalytics = async () => {
+  const fetchFullAnalytics = async () => {
     try {
-      // Fetch basic analytics data
+      // Calculate date range based on filter
+      const now = new Date();
+      const startDate = new Date();
+      
+      switch (dateFilter) {
+        case "7d":
+          startDate.setDate(now.getDate() - 7);
+          break;
+        case "30d":
+          startDate.setDate(now.getDate() - 30);
+          break;
+        case "90d":
+          startDate.setDate(now.getDate() - 90);
+          break;
+        case "1y":
+          startDate.setFullYear(now.getFullYear() - 1);
+          break;
+      }
+
+      // Fetch sales analytics
+      const { data: salesAnalytics } = await supabase
+        .from("analytics_sales")
+        .select("*")
+        .gte("sale_date", startDate.toISOString().split('T')[0])
+        .order("sale_date", { ascending: true });
+
+      // Fetch popular products
+      const { data: popularProductsData } = await supabase
+        .from("analytics_popular_products")
+        .select("*")
+        .limit(10);
+
+      // Fetch download analytics
+      const { data: downloadAnalytics } = await supabase
+        .from("analytics_downloads")
+        .select("*");
+
+      // Fetch basic metrics
       const { data: orders } = await supabase
         .from("orders")
         .select("*")
-        .eq("status", "paid");
+        .eq("status", "paid")
+        .gte("created_at", startDate.toISOString());
 
-      const { data: popularProducts } = await supabase
-        .from("analytics_popular_products")
+      const { data: downloads } = await supabase
+        .from("downloads")
         .select("*")
-        .limit(5);
+        .gte("created_at", startDate.toISOString());
+
+      // Process data
+      setSalesData(salesAnalytics || []);
+      setPopularProducts(popularProductsData || []);
+      setDownloadData(downloadAnalytics || []);
 
       if (orders) {
         const revenue = orders.reduce((sum, order) => sum + (order.amount / 100), 0);
@@ -119,11 +191,23 @@ const EnhancedAdmin = () => {
           totalRevenue: revenue,
           totalOrders: orders.length,
           avgOrderValue: avgOrder,
-          topProducts: popularProducts || []
+          topProducts: popularProductsData?.slice(0, 5) || []
         });
       }
+
+      // Download metrics
+      if (downloads) {
+        setTotalDownloads(downloads.length);
+        const uniqueUsers = new Set(downloads.map(d => d.user_id)).size;
+        setUniqueDownloaders(uniqueUsers);
+        const totalData = downloads.reduce((sum, d) => sum + (d.download_size_mb || 0), 0);
+        setTotalDataTransferred(totalData);
+        setAvgDownloadsPerUser(uniqueUsers > 0 ? downloads.length / uniqueUsers : 0);
+      }
+
     } catch (error) {
       console.error("Error fetching analytics:", error);
+      toast.error("Failed to load analytics data");
     }
   };
 
@@ -767,6 +851,23 @@ const EnhancedAdmin = () => {
           </TabsContent>
 
           <TabsContent value="analytics" className="mt-6">
+            {/* Date Filter */}
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold">Analytics Dashboard</h2>
+              <Select value={dateFilter} onValueChange={setDateFilter}>
+                <SelectTrigger className="w-32">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="7d">Last 7 days</SelectItem>
+                  <SelectItem value="30d">Last 30 days</SelectItem>
+                  <SelectItem value="90d">Last 90 days</SelectItem>
+                  <SelectItem value="1y">Last year</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <Card className="border-primary/20 shadow-elegant">
                 <CardContent className="p-6">
@@ -775,7 +876,7 @@ const EnhancedAdmin = () => {
                       <p className="text-sm text-muted-foreground">Total Revenue</p>
                       <p className="text-2xl font-bold text-green-600">${analytics.totalRevenue.toFixed(2)}</p>
                     </div>
-                    <BarChart3 className="w-8 h-8 text-green-600" />
+                    <DollarSign className="w-8 h-8 text-green-600" />
                   </div>
                 </CardContent>
               </Card>
@@ -799,7 +900,7 @@ const EnhancedAdmin = () => {
                       <p className="text-sm text-muted-foreground">Avg Order Value</p>
                       <p className="text-2xl font-bold">${analytics.avgOrderValue.toFixed(2)}</p>
                     </div>
-                    <BarChart3 className="w-8 h-8 text-primary" />
+                    <TrendingUp className="w-8 h-8 text-primary" />
                   </div>
                 </CardContent>
               </Card>
@@ -808,24 +909,110 @@ const EnhancedAdmin = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Top Products</p>
-                      <p className="text-2xl font-bold">{analytics.topProducts.length}</p>
+                      <p className="text-sm text-muted-foreground">Total Downloads</p>
+                      <p className="text-2xl font-bold">{totalDownloads}</p>
                     </div>
-                    <Star className="w-8 h-8 text-primary" />
+                    <Download className="w-8 h-8 text-primary" />
                   </div>
                 </CardContent>
               </Card>
             </div>
 
-            {analytics.topProducts.length > 0 && (
+            {/* Charts Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              {/* Revenue Chart */}
               <Card className="border-primary/20 shadow-elegant">
                 <CardHeader>
-                  <CardTitle>Top Selling Products</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5" />
+                    Revenue Over Time
+                  </CardTitle>
+                  <CardDescription>Daily revenue trends</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={salesData}>
+                        <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+                        <XAxis 
+                          dataKey="sale_date" 
+                          className="text-xs" 
+                          tickFormatter={(value) => new Date(value).toLocaleDateString()}
+                        />
+                        <YAxis className="text-xs" />
+                        <Tooltip 
+                          formatter={(value: any) => [`$${(value / 100).toFixed(2)}`, 'Revenue']}
+                          labelFormatter={(value) => new Date(value).toLocaleDateString()}
+                          contentStyle={{ 
+                            backgroundColor: 'hsl(var(--card))', 
+                            border: '1px solid hsl(var(--border))',
+                            borderRadius: '6px'
+                          }}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="revenue" 
+                          stroke="hsl(var(--primary))" 
+                          strokeWidth={2}
+                          dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 4 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Orders Chart */}
+              <Card className="border-primary/20 shadow-elegant">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Package className="w-5 h-5" />
+                    Orders Over Time
+                  </CardTitle>
+                  <CardDescription>Daily order volume</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={salesData}>
+                        <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+                        <XAxis 
+                          dataKey="sale_date" 
+                          className="text-xs"
+                          tickFormatter={(value) => new Date(value).toLocaleDateString()}
+                        />
+                        <YAxis className="text-xs" />
+                        <Tooltip 
+                          formatter={(value: any) => [value, 'Orders']}
+                          labelFormatter={(value) => new Date(value).toLocaleDateString()}
+                          contentStyle={{ 
+                            backgroundColor: 'hsl(var(--card))', 
+                            border: '1px solid hsl(var(--border))',
+                            borderRadius: '6px'
+                          }}
+                        />
+                        <Bar dataKey="order_count" fill="hsl(var(--primary))" radius={[2, 2, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Popular Products and Download Analytics */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              {/* Popular Products */}
+              <Card className="border-primary/20 shadow-elegant">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Star className="w-5 h-5" />
+                    Top Selling Products
+                  </CardTitle>
                   <CardDescription>Most popular products by sales count</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {analytics.topProducts.map((product, index) => (
+                    {popularProducts.slice(0, 5).map((product, index) => (
                       <div key={product.product_id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                         <div className="flex items-center gap-3">
                           <Badge variant="outline">#{index + 1}</Badge>
@@ -840,6 +1027,71 @@ const EnhancedAdmin = () => {
                         </div>
                       </div>
                     ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Download Analytics */}
+              <Card className="border-primary/20 shadow-elegant">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Download className="w-5 h-5" />
+                    Download Analytics
+                  </CardTitle>
+                  <CardDescription>Product download statistics</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="text-center p-3 bg-muted/50 rounded-lg">
+                      <p className="text-2xl font-bold text-primary">{uniqueDownloaders}</p>
+                      <p className="text-sm text-muted-foreground">Unique Users</p>
+                    </div>
+                    <div className="text-center p-3 bg-muted/50 rounded-lg">
+                      <p className="text-2xl font-bold text-primary">{avgDownloadsPerUser.toFixed(1)}</p>
+                      <p className="text-sm text-muted-foreground">Avg per User</p>
+                    </div>
+                  </div>
+                  <div className="text-center p-3 bg-muted/50 rounded-lg">
+                    <p className="text-2xl font-bold text-green-600">{totalDataTransferred.toFixed(1)} MB</p>
+                    <p className="text-sm text-muted-foreground">Total Data Transferred</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Product Download Distribution */}
+            {downloadData.length > 0 && (
+              <Card className="border-primary/20 shadow-elegant">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5" />
+                    Download Distribution by Product
+                  </CardTitle>
+                  <CardDescription>Download counts across all products</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={downloadData} layout="horizontal">
+                        <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+                        <XAxis type="number" className="text-xs" />
+                        <YAxis 
+                          dataKey="product_name" 
+                          type="category" 
+                          className="text-xs" 
+                          width={120}
+                        />
+                        <Tooltip 
+                          formatter={(value: any) => [value, 'Downloads']}
+                          contentStyle={{ 
+                            backgroundColor: 'hsl(var(--card))', 
+                            border: '1px solid hsl(var(--border))',
+                            borderRadius: '6px'
+                          }}
+                        />
+                        <Bar dataKey="total_downloads" fill="hsl(var(--primary))" radius={[0, 2, 2, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
                   </div>
                 </CardContent>
               </Card>
