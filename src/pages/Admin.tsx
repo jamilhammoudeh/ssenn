@@ -120,11 +120,18 @@ const EnhancedAdmin = () => {
   const [totalDataTransferred, setTotalDataTransferred] = useState(0);
   const [avgDownloadsPerUser, setAvgDownloadsPerUser] = useState(0);
 
+  // Orders state
+  const [orders, setOrders] = useState<any[]>([]);
+  const [orderSearch, setOrderSearch] = useState("");
+  const [orderStatusFilter, setOrderStatusFilter] = useState("all");
+  const [orderLoading, setOrderLoading] = useState(false);
+
   const categories = ["Education", "Design", "Audio", "Business"];
 
   useEffect(() => {
     fetchProducts();
     fetchFullAnalytics();
+    fetchOrders();
   }, [dateFilter]);
 
   const fetchFullAnalytics = async () => {
@@ -210,6 +217,68 @@ const EnhancedAdmin = () => {
       toast.error("Failed to load analytics data");
     }
   };
+
+  const fetchOrders = async () => {
+    try {
+      setOrderLoading(true);
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setOrders(data || []);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error("Failed to load orders");
+    } finally {
+      setOrderLoading(false);
+    }
+  };
+
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from("orders")
+        .update({ status: newStatus, updated_at: new Date().toISOString() })
+        .eq("id", orderId);
+
+      if (error) throw error;
+      
+      await fetchOrders(); // Refresh orders
+      toast.success("Order status updated successfully");
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      toast.error("Failed to update order status");
+    }
+  };
+
+  const getOrderStatusColor = (status: string) => {
+    switch (status) {
+      case "paid":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+      case "cancelled":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+      case "refunded":
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+    }
+  };
+
+  const filteredOrders = orders.filter((order) => {
+    const matchesSearch = 
+      order.customer_name?.toLowerCase().includes(orderSearch.toLowerCase()) ||
+      order.customer_email?.toLowerCase().includes(orderSearch.toLowerCase()) ||
+      order.product_name?.toLowerCase().includes(orderSearch.toLowerCase()) ||
+      order.id.toLowerCase().includes(orderSearch.toLowerCase());
+    
+    const matchesStatus = orderStatusFilter === "all" || order.status === orderStatusFilter;
+    
+    return matchesSearch && matchesStatus;
+  });
 
   const fetchProducts = async () => {
     try {
@@ -842,12 +911,188 @@ const EnhancedAdmin = () => {
           </TabsContent>
 
           <TabsContent value="orders" className="mt-6">
-            <div className="text-center py-12">
-              <BarChart3 className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground text-lg">
-                Order management coming soon!
-              </p>
+            {/* Orders Header */}
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold mb-2">Order Management</h2>
+                <p className="text-muted-foreground">View and manage customer orders</p>
+              </div>
+              
+              <div className="flex flex-col md:flex-row gap-2">
+                <Input
+                  placeholder="Search orders..."
+                  value={orderSearch}
+                  onChange={(e) => setOrderSearch(e.target.value)}
+                  className="md:w-64"
+                />
+                <Select value={orderStatusFilter} onValueChange={setOrderStatusFilter}>
+                  <SelectTrigger className="md:w-40">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="paid">Paid</SelectItem>
+                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                    <SelectItem value="refunded">Refunded</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
+
+            {/* Orders Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <Card className="border-primary/20 shadow-elegant">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total Orders</p>
+                      <p className="text-2xl font-bold">{orders.length}</p>
+                    </div>
+                    <Package className="w-6 h-6 text-primary" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-primary/20 shadow-elegant">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Paid Orders</p>
+                      <p className="text-2xl font-bold text-green-600">
+                        {orders.filter(o => o.status === 'paid').length}
+                      </p>
+                    </div>
+                    <BarChart3 className="w-6 h-6 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-primary/20 shadow-elegant">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Pending Orders</p>
+                      <p className="text-2xl font-bold text-yellow-600">
+                        {orders.filter(o => o.status === 'pending').length}
+                      </p>
+                    </div>
+                    <Calendar className="w-6 h-6 text-yellow-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-primary/20 shadow-elegant">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total Revenue</p>
+                      <p className="text-2xl font-bold text-green-600">
+                        ${orders.filter(o => o.status === 'paid').reduce((sum, o) => sum + (o.amount / 100), 0).toFixed(2)}
+                      </p>
+                    </div>
+                    <DollarSign className="w-6 h-6 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Orders Table */}
+            {orderLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="text-center">
+                  <Package className="w-12 h-12 mx-auto mb-4 text-muted-foreground animate-pulse" />
+                  <p className="text-muted-foreground">Loading orders...</p>
+                </div>
+              </div>
+            ) : filteredOrders.length === 0 ? (
+              <div className="text-center py-12">
+                <Package className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-muted-foreground text-lg mb-2">
+                  {orderSearch || orderStatusFilter !== "all" ? "No orders match your search" : "No orders found"}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {orderSearch || orderStatusFilter !== "all" ? "Try adjusting your search criteria" : "Orders will appear here once customers make purchases"}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredOrders.map((order) => (
+                  <Card key={order.id} className="border-primary/10 hover:shadow-lg transition-all duration-300">
+                    <CardContent className="p-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-start">
+                        {/* Order Info */}
+                        <div className="lg:col-span-2">
+                          <div className="flex items-start justify-between mb-2">
+                            <div>
+                              <h3 className="font-semibold text-lg">{order.product_name}</h3>
+                              <p className="text-sm text-muted-foreground font-mono">
+                                Order #{order.id.slice(-8).toUpperCase()}
+                              </p>
+                            </div>
+                            <Badge className={`${getOrderStatusColor(order.status)} border-0`}>
+                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                            </Badge>
+                          </div>
+                          
+                          <div className="space-y-1 text-sm">
+                            <div className="flex items-center gap-2">
+                              <Users className="w-4 h-4 text-muted-foreground" />
+                              <span>{order.customer_name || 'N/A'}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">✉</span>
+                              <span>{order.customer_email}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Calendar className="w-4 h-4 text-muted-foreground" />
+                              <span>{new Date(order.created_at).toLocaleDateString()} at {new Date(order.created_at).toLocaleTimeString()}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Amount */}
+                        <div className="text-center lg:text-left">
+                          <p className="text-sm text-muted-foreground mb-1">Amount</p>
+                          <p className="text-2xl font-bold text-green-600">
+                            ${(order.amount / 100).toFixed(2)}
+                          </p>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex flex-col gap-2">
+                          <Select 
+                            value={order.status} 
+                            onValueChange={(value) => updateOrderStatus(order.id, value)}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="pending">Pending</SelectItem>
+                              <SelectItem value="paid">Paid</SelectItem>
+                              <SelectItem value="cancelled">Cancelled</SelectItem>
+                              <SelectItem value="refunded">Refunded</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          
+                          {order.stripe_session_id && (
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => navigator.clipboard.writeText(order.stripe_session_id)}
+                              className="text-xs"
+                            >
+                              Copy Session ID
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="analytics" className="mt-6">
