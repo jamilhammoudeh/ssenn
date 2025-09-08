@@ -660,8 +660,17 @@ const EnhancedAdmin = () => {
           </Card>
         </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {/* Main Content Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="products">Products</TabsTrigger>
+            <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="products" className="mt-6">
+            {/* Products Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map(product => (
             <Card key={product.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 border-primary/10">
               <div className="aspect-video bg-muted relative overflow-hidden">
@@ -732,20 +741,111 @@ const EnhancedAdmin = () => {
               </CardFooter>
             </Card>
           ))}
-        </div>
+            </div>
 
-        {products.length === 0 && (
-          <div className="text-center py-12">
-            <Package className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground text-lg mb-4">
-              No products found. Create your first product to get started!
-            </p>
-            <Button onClick={() => setIsDialogOpen(true)}>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Your First Product
-            </Button>
-          </div>
-        )}
+            {products.length === 0 && (
+              <div className="text-center py-12">
+                <Package className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-muted-foreground text-lg mb-4">
+                  No products found. Create your first product to get started!
+                </p>
+                <Button onClick={() => setIsDialogOpen(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Your First Product
+                </Button>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="orders" className="mt-6">
+            <div className="text-center py-12">
+              <BarChart3 className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground text-lg">
+                Order management coming soon!
+              </p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="analytics" className="mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <Card className="border-primary/20 shadow-elegant">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total Revenue</p>
+                      <p className="text-2xl font-bold text-green-600">${analytics.totalRevenue.toFixed(2)}</p>
+                    </div>
+                    <BarChart3 className="w-8 h-8 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-primary/20 shadow-elegant">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total Orders</p>
+                      <p className="text-2xl font-bold">{analytics.totalOrders}</p>
+                    </div>
+                    <Package className="w-8 h-8 text-primary" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-primary/20 shadow-elegant">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Avg Order Value</p>
+                      <p className="text-2xl font-bold">${analytics.avgOrderValue.toFixed(2)}</p>
+                    </div>
+                    <BarChart3 className="w-8 h-8 text-primary" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-primary/20 shadow-elegant">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Top Products</p>
+                      <p className="text-2xl font-bold">{analytics.topProducts.length}</p>
+                    </div>
+                    <Star className="w-8 h-8 text-primary" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {analytics.topProducts.length > 0 && (
+              <Card className="border-primary/20 shadow-elegant">
+                <CardHeader>
+                  <CardTitle>Top Selling Products</CardTitle>
+                  <CardDescription>Most popular products by sales count</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {analytics.topProducts.map((product, index) => (
+                      <div key={product.product_id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <Badge variant="outline">#{index + 1}</Badge>
+                          <div>
+                            <p className="font-medium">{product.product_name}</p>
+                            <p className="text-sm text-muted-foreground">{product.sales_count} sales</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold">${(product.total_revenue / 100).toFixed(2)}</p>
+                          <p className="text-sm text-muted-foreground">revenue</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
