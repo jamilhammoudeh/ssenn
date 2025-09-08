@@ -1,5 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Bold, Italic, List, Link2 } from "lucide-react";
 
 interface RichTextEditorProps {
   value: string;
@@ -10,73 +13,127 @@ interface RichTextEditorProps {
 }
 
 const RichTextEditor = ({ value, onChange, placeholder, label, required }: RichTextEditorProps) => {
-  const [ReactQuill, setReactQuill] = useState<any>(null);
-  const [isClient, setIsClient] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
+  const formatText = (format: string) => {
+    const textarea = document.getElementById('rich-textarea') as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = value.substring(start, end);
     
-    // Dynamically import ReactQuill to avoid SSR issues
-    const loadQuill = async () => {
-      try {
-        const { default: QuillComponent } = await import('react-quill');
-        await import('react-quill/dist/quill.snow.css');
-        setReactQuill(() => QuillComponent);
-      } catch (error) {
-        console.error('Failed to load ReactQuill:', error);
-      }
-    };
+    let formattedText = '';
+    switch (format) {
+      case 'bold':
+        formattedText = `**${selectedText}**`;
+        break;
+      case 'italic':
+        formattedText = `*${selectedText}*`;
+        break;
+      case 'list':
+        formattedText = `\n- ${selectedText}`;
+        break;
+      case 'link':
+        formattedText = `[${selectedText}](url)`;
+        break;
+      default:
+        formattedText = selectedText;
+    }
 
-    loadQuill();
-  }, []);
-
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link'],
-      ['clean']
-    ],
+    const newValue = value.substring(0, start) + formattedText + value.substring(end);
+    onChange(newValue);
   };
 
-  const formats = [
-    'header', 'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet', 'link'
-  ];
-
-  if (!isClient || !ReactQuill) {
-    return (
-      <div className="space-y-2">
-        {label && (
-          <Label htmlFor="description">
-            {label} {required && '*'}
-          </Label>
-        )}
-        <div className="border rounded-md p-3 min-h-[150px] bg-muted/20 animate-pulse">
-          <p className="text-muted-foreground text-sm">Loading rich text editor...</p>
-        </div>
-      </div>
-    );
-  }
+  const renderPreview = (text: string) => {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-blue-600 underline">$1</a>')
+      .replace(/^- (.*)/gm, '<ul><li>$1</li></ul>')
+      .replace(/\n/g, '<br>');
+  };
 
   return (
     <div className="space-y-2">
       {label && (
-        <Label htmlFor="description">
+        <Label htmlFor="rich-textarea">
           {label} {required && '*'}
         </Label>
       )}
-      <div className="border rounded-md [&_.ql-editor]:min-h-[120px] [&_.ql-toolbar]:border-b [&_.ql-container]:border-t-0">
-        <ReactQuill
-          value={value}
-          onChange={onChange}
-          modules={modules}
-          formats={formats}
-          placeholder={placeholder}
-          theme="snow"
-        />
+      
+      <div className="border rounded-md">
+        {/* Toolbar */}
+        <div className="flex items-center gap-1 p-2 border-b bg-muted/20">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => formatText('bold')}
+            className="h-8 w-8 p-0"
+          >
+            <Bold className="h-4 w-4" />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => formatText('italic')}
+            className="h-8 w-8 p-0"
+          >
+            <Italic className="h-4 w-4" />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => formatText('list')}
+            className="h-8 w-8 p-0"
+          >
+            <List className="h-4 w-4" />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => formatText('link')}
+            className="h-8 w-8 p-0"
+          >
+            <Link2 className="h-4 w-4" />
+          </Button>
+          <div className="ml-auto">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsPreview(!isPreview)}
+            >
+              {isPreview ? 'Edit' : 'Preview'}
+            </Button>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        {isPreview ? (
+          <div 
+            className="p-3 min-h-[120px] prose prose-sm max-w-none"
+            dangerouslySetInnerHTML={{ __html: renderPreview(value) }}
+          />
+        ) : (
+          <Textarea
+            id="rich-textarea"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder}
+            className="border-0 resize-none focus-visible:ring-0 min-h-[120px]"
+            required={required}
+          />
+        )}
       </div>
+      
+      <p className="text-xs text-muted-foreground">
+        Use **bold**, *italic*, [link](url), and - for lists. Click Preview to see formatting.
+      </p>
     </div>
   );
 };
