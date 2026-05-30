@@ -1,181 +1,149 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Eye, Target, Heart, Users, Award, Globe } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
+import {
+  Target,
+  Eye,
+  Heart,
+  UsersThree,
+  Medal,
+  GlobeHemisphereWest,
+} from "@phosphor-icons/react";
 
 const About = () => {
   const values = [
     {
       icon: Heart,
-      title: "Ihsaan Excellence",
-      description: "We pursue ihsaan—excellence in all that we do—striving for perfection in our work, relationships, and impact on society."
+      title: "Compassionate leadership",
+      description: "We lead with patience and respect.",
     },
     {
-      icon: Users,
-      title: "Authentic Relationships",
-      description: "Building genuine connections and partnerships based on trust, transparency, and mutual respect."
+      icon: UsersThree,
+      title: "Truthful & trustworthy",
+      description: "We communicate honestly. Our word stands.",
     },
     {
       icon: Target,
-      title: "Strategic Vision",
-      description: "Long-term thinking that prioritizes sustainable growth and meaningful impact over short-term gains."
+      title: "Sincerity",
+      description: "Every initiative serves beyond profit.",
     },
     {
-      icon: Award,
-      title: "Quality Focus",
-      description: "Quality over quantity in everything we do—from partnerships to projects to people."
+      icon: Medal,
+      title: "Excellence",
+      description: "We reject mediocrity.",
     },
     {
-      icon: Globe,
-      title: "Social Impact",
-      description: "Contributing meaningfully to society through education, innovation, and responsible business practices."
-    }
+      icon: GlobeHemisphereWest,
+      title: "Interdependent impact",
+      description: "Individual growth strengthens collective impact.",
+    },
   ];
 
   const stats = [
-    { number: "2024", label: "Founded" },
-    { number: "1", label: "Active Subsidiary" },
-    { number: "100%", label: "Commitment to Excellence" },
-    { number: "∞", label: "Growth Potential" }
+    { number: "6", label: "Active initiatives" },
+    { number: "1,276+", label: "Adult learners served" },
+    { number: "73", label: "Countries reached" },
+    { number: "2024", label: "Year founded" },
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <section className="bg-gradient-hero text-white py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              About SSENN
-            </h1>
-            <p className="text-xl text-white/90 leading-relaxed">
-              A holding corporation built on the principles of excellence, authenticity, 
-              and meaningful impact in education and digital innovation.
-            </p>
-          </div>
-        </div>
-      </section>
+    <div>
+      <PageHeader
+        eyebrow="About SSENN"
+        title="A holdings corporation building and acquiring educational ventures for adult learners worldwide."
+      />
 
       {/* Mission & Vision */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center">
-                  <Target className="w-6 h-6 text-white" />
-                </div>
-                <h2 className="text-3xl font-bold">Our Mission</h2>
+      <section className="container mx-auto px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+        <div className="grid gap-14 lg:grid-cols-2">
+          <div className="space-y-12">
+            <div className="border-t border-border pt-8">
+              <div className="flex items-center gap-3">
+                <Target className="h-7 w-7 text-primary" weight="light" />
+                <span className="eyebrow">Our mission</span>
               </div>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                To build and nurture a portfolio of exceptional companies that drive innovation in 
-                education and digital transformation, while maintaining the highest standards of 
-                excellence and contributing meaningfully to society.
-              </p>
-              
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center">
-                  <Eye className="w-6 h-6 text-white" />
-                </div>
-                <h2 className="text-3xl font-bold">Our Vision</h2>
-              </div>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                To become a leading holding corporation that sets the standard for ethical business 
-                practices, authentic relationships, and sustainable growth in the education and 
-                technology sectors.
+              <p className="mt-5 text-2xl font-display font-medium leading-snug text-foreground">
+                To build educational ventures where learning becomes how adults
+                live.
               </p>
             </div>
-            
-            <div className="grid grid-cols-2 gap-6">
-              {stats.map((stat, index) => (
-                <Card key={index} className="text-center shadow-card">
-                  <CardContent className="pt-8 pb-6">
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      {stat.number}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {stat.label}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="border-t border-border pt-8">
+              <div className="flex items-center gap-3">
+                <Eye className="h-7 w-7 text-primary" weight="light" />
+                <span className="eyebrow">Our vision</span>
+              </div>
+              <p className="mt-5 text-2xl font-display font-medium leading-snug text-foreground">
+                We develop and acquire educational initiatives. Each one operates
+                independently with strong leadership while maintaining SSENN
+                standards: quality teaching, practical life integration, and
+                measurable learner outcomes.
+              </p>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Our Values */}
-      <section className="py-20 bg-gradient-subtle">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Our Core Values
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              The principles that guide every decision we make and every relationship we build.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {values.map((value, index) => (
-              <Card key={index} className="shadow-card hover:shadow-elegant transition-all duration-300">
-                <CardContent className="pt-8 pb-6 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-primary rounded-2xl mb-6">
-                    <value.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-4">{value.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{value.description}</p>
-                </CardContent>
-              </Card>
+          <div className="grid grid-cols-2 gap-px self-start overflow-hidden rounded-lg border border-border bg-border">
+            {stats.map((stat) => (
+              <div key={stat.label} className="bg-card p-8 text-center">
+                <div className="font-display text-4xl font-semibold text-primary md:text-5xl">
+                  {stat.number}
+                </div>
+                <div className="mt-2 text-sm text-muted-foreground">
+                  {stat.label}
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Our Approach */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Our Approach
-              </h2>
-              <p className="text-lg text-muted-foreground">
-                Quality over quantity. Strategy over scale. Results over vanity metrics.
+      {/* Ventures */}
+      <section className="border-y border-border bg-secondary/40">
+        <div className="container mx-auto px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="eyebrow">Our ventures</span>
+            <p className="mt-6 text-2xl font-display font-medium leading-snug text-foreground md:text-3xl">
+              Currently operating 6 initiatives across 73 countries, serving
+              1,276+ adult learners.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="container mx-auto px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+        <div className="max-w-2xl">
+          <span className="eyebrow">What we value</span>
+          <h2 className="mt-5">Our core values</h2>
+        </div>
+
+        <div className="mt-16 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+          {values.map((value) => (
+            <div key={value.title} className="bg-card p-8">
+              <value.icon className="h-7 w-7 text-primary" weight="light" />
+              <h3 className="mt-6 text-xl font-semibold">{value.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                {value.description}
               </p>
             </div>
+          ))}
+          {/* Filler cell keeps the hairline grid even (5 values + 1) */}
+          <div className="flex items-center bg-card p-8">
+            <p className="font-display text-lg italic leading-snug text-muted-foreground">
+              And the discipline to live by them, every day.
+            </p>
+          </div>
+        </div>
+      </section>
 
-            <div className="space-y-12">
-              <Card className="shadow-elegant">
-                <CardContent className="p-8 md:p-12">
-                  <h3 className="text-2xl font-bold mb-6">Strategic Portfolio Management</h3>
-                  <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                    We don't just acquire companies—we carefully select and nurture businesses that 
-                    align with our values and have the potential for significant positive impact. 
-                    Each subsidiary receives the support, resources, and strategic guidance needed 
-                    to achieve excellence in their respective fields.
-                  </p>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
-                    Our selective approach means we work only with companies and partners who 
-                    understand the bigger picture—that their influence carries responsibility and 
-                    potential for positive societal impact. We prioritize partnerships that promote 
-                    beneficial knowledge, educational content, and services that genuinely serve humanity.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-elegant">
-                <CardContent className="p-8 md:p-12">
-                  <h3 className="text-2xl font-bold mb-6">Long-term Excellence</h3>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
-                    In an industry often driven by inflated metrics and fleeting trends, we focus 
-                    on what stands the test of time: real engagement, genuine audiences, measurable 
-                    results, and meaningful impact that extends beyond commerce. When you work with 
-                    SSENN and our subsidiaries, you're not just getting access to our growing 
-                    network—you're getting a partner invested in excellence and your long-term 
-                    success in creating influence that matters.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+      {/* Why this matters */}
+      <section className="border-y border-border bg-secondary/40">
+        <div className="container mx-auto px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+          <div className="mx-auto max-w-3xl">
+            <span className="eyebrow">Our measure</span>
+            <h2 className="mt-5">Why this matters</h2>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+              We measure success differently. Not by completion rates or
+              certifications, but by how learning actually changes how people
+              live.
+            </p>
           </div>
         </div>
       </section>

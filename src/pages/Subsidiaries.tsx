@@ -1,196 +1,198 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import PageHeader from "@/components/PageHeader";
 import { Link } from "react-router-dom";
-import { ArrowRight, Target, Users, TrendingUp, Shield, Search, BarChart3 } from "lucide-react";
+import {
+  ArrowUpRight,
+  MagnifyingGlass,
+  Target,
+  UsersThree,
+  ChartBar,
+} from "@phosphor-icons/react";
 
 const Subsidiaries = () => {
   const subsidiaries = [
     {
       name: "Strategic Influence Ihsaan",
-      tagline: "Authentic Digital Relationships",
-      description: "We're more than just an influencer marketing agency—we're architects of authentic digital relationships that translate into genuine bonds. Grounded in the pursuit of ihsaan and striving for excellence in all that we do, our mission is simple: connect the right brands with the right influencers to create campaigns that feel natural, drive results, and contribute meaningfully to society through shared benefit and mutual growth.",
+      tagline: "Authentic digital relationships",
+      description:
+        "More than an influencer marketing agency, we are architects of authentic digital relationships that translate into genuine bonds. Grounded in the pursuit of ihsaan, our mission is simple: connect the right brands with the right creators to build campaigns that feel natural, drive results, and contribute meaningfully through shared benefit and mutual growth.",
       established: "2024",
-      focus: ["Influencer Marketing", "Digital Strategy", "Brand Partnerships"],
+      focus: ["Influencer marketing", "Digital strategy", "Brand partnerships"],
       services: [
         {
-          icon: Search,
-          title: "Selective Curation",
-          description: "We work only with influencers who maintain authentic engagement, demonstrate consistent content quality, and align with ethical values."
+          icon: MagnifyingGlass,
+          title: "Selective curation",
+          description:
+            "We work only with creators who maintain authentic engagement, consistent quality, and ethical values.",
         },
         {
           icon: Target,
-          title: "Strategic Matching",
-          description: "Our matching process goes beyond follower count—we analyze audience demographics, engagement patterns, and content alignment for perfect brand-influencer fit."
+          title: "Strategic matching",
+          description:
+            "We look beyond follower count, analysing audience, engagement, and content alignment for the right fit.",
         },
         {
-          icon: Users,
-          title: "Campaign Management",
-          description: "From initial outreach to final deliverables, we handle every detail. You focus on your business—we handle the influence."
+          icon: UsersThree,
+          title: "Campaign management",
+          description:
+            "From initial outreach to final deliverables, we handle every detail so you can focus on your business.",
         },
         {
-          icon: BarChart3,
-          title: "Performance Tracking",
-          description: "Comprehensive reporting on campaign performance, engagement metrics, and ROI to ensure your influencer investments deliver measurable results."
-        }
+          icon: ChartBar,
+          title: "Performance tracking",
+          description:
+            "Clear reporting on performance, engagement, and ROI so every investment delivers measurable results.",
+        },
       ],
       status: "Active",
-      website: "#"
-    }
+    },
   ];
 
   const futureOpportunities = [
-    "Educational Technology Platforms",
-    "Digital Learning Solutions", 
-    "Content Creation Studios",
-    "Data Analytics Services"
+    "Educational technology platforms",
+    "Digital learning solutions",
+    "Content creation studios",
+    "Data analytics services",
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <section className="bg-gradient-hero text-white py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Our Portfolio Companies
-            </h1>
-            <p className="text-xl text-white/90 leading-relaxed">
-              Discover the innovative subsidiaries that make up the SSENN ecosystem, 
-              each specializing in strategic solutions that create meaningful impact.
-            </p>
-          </div>
+    <div>
+      <PageHeader
+        eyebrow="The portfolio"
+        title="Our portfolio companies"
+        description="The companies that make up the SSENN ecosystem, each working at the forefront of its field, held to the same standard of excellence."
+      />
+
+      {/* Active subsidiaries */}
+      <section className="container mx-auto px-4 py-20 sm:px-6 md:py-24 lg:px-8">
+        <div className="mb-12 max-w-2xl">
+          <span className="eyebrow">Active</span>
+          <h2 className="mt-5">Companies we own today</h2>
         </div>
+
+        {subsidiaries.map((subsidiary) => (
+          <article
+            key={subsidiary.name}
+            className="rounded-lg border border-border bg-card p-8 shadow-card md:p-12"
+          >
+            {/* Header */}
+            <div className="flex flex-col gap-6 border-b border-border pb-8 md:flex-row md:items-start md:justify-between">
+              <div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <h3 className="text-2xl font-semibold md:text-3xl">
+                    {subsidiary.name}
+                  </h3>
+                  <Badge
+                    variant="outline"
+                    className="border-primary/30 text-primary"
+                  >
+                    {subsidiary.status}
+                  </Badge>
+                </div>
+                <p className="mt-2 text-lg italic text-muted-foreground">
+                  {subsidiary.tagline}
+                </p>
+              </div>
+              <div className="md:text-right">
+                <div className="text-sm text-muted-foreground">Established</div>
+                <div className="font-display text-3xl font-semibold text-primary">
+                  {subsidiary.established}
+                </div>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p className="mt-8 max-w-3xl text-lg leading-relaxed text-foreground">
+              {subsidiary.description}
+            </p>
+
+            {/* Focus areas */}
+            <div className="mt-8">
+              <div className="eyebrow">Focus areas</div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {subsidiary.focus.map((area) => (
+                  <Badge key={area} variant="secondary" className="font-normal">
+                    {area}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* Services */}
+            <div className="mt-10">
+              <div className="eyebrow">Core services</div>
+              <div className="mt-6 grid gap-x-10 gap-y-8 sm:grid-cols-2">
+                {subsidiary.services.map((service) => (
+                  <div key={service.title} className="flex gap-4">
+                    <service.icon
+                      className="mt-0.5 h-6 w-6 flex-shrink-0 text-primary"
+                      weight="light"
+                    />
+                    <div>
+                      <h4 className="font-semibold">{service.title}</h4>
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                        {service.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-10 flex flex-col gap-3 border-t border-border pt-8 sm:flex-row">
+              <Button asChild className="group">
+                <Link to="/ihsaan">
+                  Learn more
+                  <ArrowUpRight
+                    className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    weight="bold"
+                  />
+                </Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link to="/contact">Contact the team</Link>
+              </Button>
+            </div>
+          </article>
+        ))}
       </section>
 
-      {/* Current Subsidiaries */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">
-              Active Subsidiaries
-            </h2>
-            <p className="text-lg text-muted-foreground text-center max-w-2xl mx-auto">
-              Our current portfolio of companies, each operating at the forefront of their respective industries.
+      {/* Future opportunities */}
+      <section className="border-t border-border bg-secondary/40">
+        <div className="container mx-auto px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+          <div className="max-w-2xl">
+            <span className="eyebrow">Looking ahead</span>
+            <h2 className="mt-5">Future expansion</h2>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+              We're always exploring new opportunities to grow the portfolio
+              with companies that align with our mission and values.
             </p>
           </div>
 
-          {subsidiaries.map((subsidiary, index) => (
-            <Card key={index} className="shadow-elegant hover:shadow-xl transition-all duration-300 mb-12">
-              <CardContent className="p-8 md:p-12">
-                {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-2xl md:text-3xl font-bold">{subsidiary.name}</h3>
-                      <Badge variant="secondary" className="bg-primary/10 text-primary">
-                        {subsidiary.status}
-                      </Badge>
-                    </div>
-                    <p className="text-lg text-muted-foreground italic">{subsidiary.tagline}</p>
-                  </div>
-                  <div className="mt-4 md:mt-0 text-right">
-                    <div className="text-sm text-muted-foreground">Established</div>
-                    <div className="text-2xl font-bold text-primary">{subsidiary.established}</div>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <div className="mb-8">
-                  <p className="text-lg leading-relaxed text-foreground">
-                    {subsidiary.description}
-                  </p>
-                </div>
-
-                {/* Focus Areas */}
-                <div className="mb-8">
-                  <h4 className="font-semibold mb-4">Focus Areas</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {subsidiary.focus.map((area, areaIndex) => (
-                      <Badge key={areaIndex} variant="outline" className="text-sm">
-                        {area}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Services */}
-                <div className="mb-8">
-                  <h4 className="font-semibold mb-6">Core Services</h4>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {subsidiary.services.map((service, serviceIndex) => (
-                      <div key={serviceIndex} className="flex gap-4">
-                        <div className="flex-shrink-0">
-                          <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center">
-                            <service.icon className="w-6 h-6 text-white" />
-                          </div>
-                        </div>
-                        <div>
-                          <h5 className="font-semibold mb-2">{service.title}</h5>
-                          <p className="text-sm text-muted-foreground leading-relaxed">
-                            {service.description}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* CTA */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button asChild variant="default" className="shadow-button">
-                    <Link to="/ihsaan">
-                      Learn More
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button variant="outline">
-                    Contact Team
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* Future Opportunities */}
-      <section className="py-20 bg-gradient-subtle">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Future Expansion
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We're always exploring new opportunities to expand our portfolio with 
-              innovative companies that align with our mission and values.
-            </p>
+          <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
+            {futureOpportunities.map((opportunity) => (
+              <div
+                key={opportunity}
+                className="flex items-center gap-3 bg-card px-6 py-5"
+              >
+                <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                <span className="font-medium">{opportunity}</span>
+              </div>
+            ))}
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <Card className="shadow-card">
-              <CardContent className="p-8">
-                <h3 className="text-xl font-semibold mb-6 text-center">
-                  Areas of Interest
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {futureOpportunities.map((opportunity, index) => (
-                    <div key={index} className="flex items-center gap-3 p-4 rounded-lg bg-muted/50">
-                      <TrendingUp className="w-5 h-5 text-primary flex-shrink-0" />
-                      <span className="font-medium">{opportunity}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="text-center mt-8">
-                  <Button asChild variant="outline">
-                    <Link to="/contact">
-                      Partnership Opportunities
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="mt-10">
+            <Button asChild variant="outline" className="group">
+              <Link to="/contact">
+                Partnership opportunities
+                <ArrowUpRight
+                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  weight="bold"
+                />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

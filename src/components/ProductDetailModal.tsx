@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Calendar, Package, ChevronLeft, ChevronRight } from "lucide-react";
+import { CalendarBlank, Package, CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { useState } from "react";
 
 interface ProductImage {
@@ -94,7 +94,7 @@ const ProductDetailModal = ({
                         className="absolute left-2 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
                         onClick={prevImage}
                       >
-                        <ChevronLeft className="w-4 h-4" />
+                        <CaretLeft className="w-4 h-4" />
                       </Button>
                       <Button
                         variant="secondary"
@@ -102,7 +102,7 @@ const ProductDetailModal = ({
                         className="absolute right-2 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
                         onClick={nextImage}
                       >
-                        <ChevronRight className="w-4 h-4" />
+                        <CaretRight className="w-4 h-4" />
                       </Button>
                     </>
                   )}
@@ -179,7 +179,7 @@ const ProductDetailModal = ({
                 </div>
                 {product.created_at && (
                   <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="w-4 h-4" />
+                    <CalendarBlank className="w-4 h-4" />
                     <span>Released {formatDate(product.created_at)}</span>
                   </div>
                 )}

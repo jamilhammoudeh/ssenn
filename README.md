@@ -1,73 +1,68 @@
-# Welcome to your Lovable project
+# SSENN Education Holdings
 
-## Project info
+Marketing site and lightweight commerce/admin surface for **SSENN**, a holding
+company that builds and stewards a focused portfolio of education and digital
+companies, guided by the pursuit of *ihsaan*, excellence in everything we do.
 
-**URL**: https://lovable.dev/projects/aa5437f0-9136-49e1-83af-730d2207d30d
+The flagship subsidiary is **Strategic Influence Ihsaan**, an influencer
+marketing company.
 
-## How can I edit this code?
+## Tech stack
 
-There are several ways of editing your application.
+- **Vite** + **React 18** + **TypeScript**
+- **Tailwind CSS** with a tokenized design system (see `src/index.css`)
+- **shadcn/ui** (Radix primitives) for UI components
+- **Phosphor Icons** for content iconography
+- **Supabase** for auth, products, and orders
+- **React Router**, **TanStack Query**, **Recharts**
 
-**Use Lovable**
+## Design system
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/aa5437f0-9136-49e1-83af-730d2207d30d) and start prompting.
+The look is intentionally editorial: a warm neutral palette, **Fraunces** for
+display headings, **Inter** for body/UI, hairline borders, and a single deep
+teal accent. Everything is driven by CSS variables in
+[`src/index.css`](src/index.css), the entire brand pivots on `--primary`, so
+re-skinning the site is a one-line change.
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Getting started
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the dev server (http://localhost:8080)
 npm run dev
+
+# Production build
+npm run build
+
+# Preview the production build
+npm run preview
+
+# Lint
+npm run lint
 ```
 
-**Edit a file directly in GitHub**
+## Routes
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+| Path                      | Page                  | Access                |
+| ------------------------- | --------------------- | --------------------- |
+| `/`                       | Home                  | Public                |
+| `/subsidiaries`           | Portfolio companies   | Public                |
+| `/about`                  | About                 | Public                |
+| `/ihsaan`                 | Strategic Influence   | Public                |
+| `/shop`                   | Digital products      | Public                |
+| `/contact`                | Contact               | Public                |
+| `/auth`                   | Sign in / sign up     | Public                |
+| `/admin`                  | Product/order admin   | Authenticated only    |
+| `/business-intelligence`  | Analytics dashboard   | Authenticated only    |
 
-**Use GitHub Codespaces**
+> **Note:** protected routes currently require a signed-in user but do **not**
+> enforce an admin *role*. For production, enforce role-based access with
+> Supabase row-level security and a roles table.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Configuration
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/aa5437f0-9136-49e1-83af-730d2207d30d) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Supabase credentials live in [`src/integrations/supabase/client.ts`](src/integrations/supabase/client.ts).
+The values are the **public anon key** and project URL, which are designed to be
+exposed in client code and are protected by row-level security. `.env` is git-ignored.

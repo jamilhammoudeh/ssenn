@@ -1,144 +1,171 @@
 import Hero from "@/components/Hero";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Target, Users, Globe, Lightbulb } from "lucide-react";
+import {
+  ArrowRight,
+  Target,
+  Medal,
+  Handshake,
+  GlobeHemisphereWest,
+  Books,
+  CheckCircle,
+} from "@phosphor-icons/react";
 
 const Home = () => {
-  const highlights = [
+  const differentiators = [
     {
       icon: Target,
-      title: "Strategic Vision",
-      description: "Focused on long-term growth and sustainable impact across our portfolio companies."
+      title: "Mission-Aligned Acquisition",
+      description:
+        "We acquire ventures committed to evidence-based education serving adult learners.",
     },
     {
-      icon: Users,
-      title: "Expert Leadership",
-      description: "Experienced management team with proven track records in education and technology."
+      icon: Medal,
+      title: "Operational Excellence",
+      description:
+        "Every venture maintains our standards: quality teaching, practical application, measurable outcomes.",
     },
     {
-      icon: Globe,
-      title: "Global Reach",
-      description: "International perspective with local expertise in key educational markets."
+      icon: Handshake,
+      title: "Collaborative Synergy",
+      description:
+        "Portfolio ventures strengthen each other through shared expertise and resources. Stronger together than alone.",
     },
     {
-      icon: Lightbulb,
-      title: "Innovation Focus",
-      description: "Committed to advancing educational technology and digital transformation."
-    }
+      icon: GlobeHemisphereWest,
+      title: "Global Impact Focus",
+      description:
+        "Building a portfolio that systematically improves how adults learn and live worldwide.",
+    },
+  ];
+
+  const specializations = [
+    "Evidence-Based Learning Resources",
+    "Digital Publishing & Distribution",
+    "Curriculum Development",
+    "Adult Learner-Focused Materials",
   ];
 
   return (
-    <div className="min-h-screen">
+    <div>
       <Hero />
-      
-      {/* Company Overview */}
-      <section className="py-20 bg-gradient-subtle">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              A Holding Corporation Built for Growth
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              SSENN serves as the parent company for a carefully selected portfolio of subsidiaries, 
-              each operating at the forefront of educational innovation and digital excellence.
-            </p>
-          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {highlights.map((highlight, index) => (
-              <Card key={index} className="text-center shadow-card hover:shadow-elegant transition-all duration-300">
-                <CardContent className="pt-8 pb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-primary rounded-2xl mb-6">
-                    <highlight.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-4">{highlight.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{highlight.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+      {/* A Holding Corporation Built for Growth */}
+      <section className="container mx-auto px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="eyebrow">Who we are</span>
+          <h2 className="mt-5 text-balance">
+            A Holding Corporation{" "}
+            <span className="bg-gradient-primary bg-clip-text text-transparent">
+              Built for Growth
+            </span>
+          </h2>
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+            SSENN develops and acquires educational ventures. Each maintains our
+            standards: measurable outcomes, evidence-based methods, practical
+            life integration.
+          </p>
+        </div>
+
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {differentiators.map((item) => (
+            <div
+              key={item.title}
+              className="group rounded-2xl border border-border bg-card p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-elegant"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-primary text-white shadow-button transition-transform duration-300 group-hover:scale-105">
+                <item.icon className="h-6 w-6" weight="duotone" />
+              </div>
+              <h3 className="mt-6 text-lg font-semibold">{item.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                {item.description}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Subsidiaries Preview */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Our Portfolio Companies
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Discover the innovative subsidiaries driving educational excellence and digital transformation.
+      {/* Our Initiatives */}
+      <section className="relative isolate overflow-hidden border-y border-border bg-secondary/40">
+        <div className="pointer-events-none absolute right-[-8%] top-[-25%] -z-10 h-[28rem] w-[28rem] rounded-full bg-primary/5 blur-3xl" />
+
+        <div className="container mx-auto px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="eyebrow">The portfolio</span>
+            <h2 className="mt-5 text-balance">Our Initiatives</h2>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+              Educational initiatives transforming how adults learn and live
+              through digital learning, evidence-based materials, and community
+              programs.
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <Card className="shadow-elegant hover:shadow-xl transition-all duration-300">
-              <CardContent className="p-8 md:p-12">
-                <div className="grid md:grid-cols-2 gap-8 items-center">
-                  <div>
-                    <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                      Strategic Influence Ihsaan
-                    </h3>
-                    <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
-                      Our flagship subsidiary specializing in authentic digital relationships and 
-                      strategic influencer marketing that creates meaningful connections between 
-                      brands and communities.
-                    </p>
-                    <Button asChild variant="default" className="shadow-button">
-                      <Link to="/subsidiaries">
-                        Explore All Companies
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
+          <div className="mt-16 grid items-center gap-14 lg:grid-cols-2">
+            <div>
+              <div className="inline-flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-primary text-white shadow-button">
+                  <Books className="h-5 w-5" weight="duotone" />
+                </div>
+                <span className="eyebrow">Featured initiative</span>
+              </div>
+              <h3 className="mt-5 text-balance text-3xl font-semibold">
+                SSENN Publishing Press
+              </h3>
+              <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+                Our publishing platform creating learning resources that
+                integrate into adult life; from study guides and courses to
+                frameworks and digital materials. Every publication meets SSENN
+                standards for quality, practical application, and collaborative
+                transformation.
+              </p>
+              <div className="mt-8">
+                <Button asChild size="lg" variant="gradient" className="group">
+                  <Link to="/subsidiaries">
+                    Explore All Initiatives
+                    <ArrowRight
+                      className="transition-transform group-hover:translate-x-0.5"
+                      weight="bold"
+                    />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="group rounded-2xl border border-border bg-card p-8 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-elegant md:p-10">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="bg-gradient-primary bg-clip-text text-6xl font-bold leading-none tracking-tight text-transparent">
+                    2024
                   </div>
-                  <div className="bg-gradient-primary rounded-2xl p-8 text-center text-white">
-                    <div className="text-4xl font-bold mb-2">2024</div>
-                    <div className="text-lg opacity-90">Founded</div>
-                    <div className="mt-6 space-y-2">
-                      <div className="text-sm opacity-80">Specializing in</div>
-                      <div className="font-semibold">Influencer Marketing</div>
-                      <div className="font-semibold">Digital Strategy</div>
-                    </div>
+                  <div className="mt-3 text-sm text-muted-foreground">
+                    Established
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
+                <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                  In Development / Launching
+                </span>
+              </div>
 
-      {/* Call to Action */}
-      <section className="py-20 bg-gradient-hero text-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Partner with SSENN
-          </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Explore opportunities to collaborate with our growing portfolio of innovative companies.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              asChild
-              size="lg" 
-              variant="secondary"
-              className="text-lg px-8 py-4"
-            >
-              <Link to="/contact">
-                Get in Touch
-              </Link>
-            </Button>
-            <Button 
-              asChild
-              size="lg" 
-              variant="outline"
-              className="text-lg px-8 py-4 border-white/30 text-white hover:bg-white/10"
-            >
-              <Link to="/about">
-                Learn About Us
-              </Link>
-            </Button>
+              <div className="mt-8 border-t border-border pt-8">
+                <div className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                  Specializations
+                </div>
+                <ul className="mt-5 space-y-3.5">
+                  {specializations.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-sm font-medium text-foreground"
+                    >
+                      <CheckCircle
+                        className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary"
+                        weight="fill"
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>

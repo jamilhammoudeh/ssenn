@@ -1,143 +1,124 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Target, Shield, BarChart3, Lock, ArrowRight, Mail, Phone } from "lucide-react";
+import {
+  SealCheck,
+  Briefcase,
+  ChartLineUp,
+  ShieldCheck,
+  ArrowUpRight,
+} from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 
 const Ihsaan = () => {
   const features = [
     {
-      icon: Target,
-      title: "Pre-Vetted Network",
-      description: "Every influencer in our network demonstrates authentic engagement, ethical content practices, and genuine connection with their audience. We do the research so you don't have to."
+      icon: SealCheck,
+      title: "Pre-vetted network",
+      description:
+        "Every creator in our network demonstrates authentic engagement, ethical content, and a genuine connection with their audience. We do the research so you don't have to.",
     },
     {
-      icon: Shield,
-      title: "Full Campaign Management",
-      description: "From initial outreach to final deliverables, we handle every detail. You focus on your business—we handle the influence."
+      icon: Briefcase,
+      title: "Full campaign management",
+      description:
+        "From initial outreach to final deliverables, we handle every detail. You focus on your business, we handle the influence.",
     },
     {
-      icon: BarChart3,
-      title: "Performance-Based Pricing",
-      description: "We only succeed when you do. Our commission-based model ensures we're invested in delivering real results, not just connections."
+      icon: ChartLineUp,
+      title: "Performance-based pricing",
+      description:
+        "We only succeed when you do. Our commission-based model keeps us invested in real results, not just connections.",
     },
     {
-      icon: Lock,
-      title: "Risk-Free Partnerships",
-      description: "No upfront fees, no long-term contracts. Pay only for successful campaign deliveries and proven performance."
-    }
+      icon: ShieldCheck,
+      title: "Risk-free partnerships",
+      description:
+        "No upfront fees, no long-term contracts. Pay only for successful campaign deliveries and proven performance.",
+    },
   ];
 
   const steps = [
     {
-      number: "1",
-      title: "Discovery Call",
-      description: "We learn about your brand, goals, and target audience to identify the perfect influencer matches"
+      number: "01",
+      title: "Discovery call",
+      description:
+        "We learn about your brand, goals, and audience to identify the right creator matches.",
     },
     {
-      number: "2", 
-      title: "Strategic Matching",
-      description: "Our team presents pre-vetted influencer options with proven track records in your niche"
+      number: "02",
+      title: "Strategic matching",
+      description:
+        "We present pre-vetted creator options with proven track records in your niche.",
     },
     {
-      number: "3",
-      title: "Campaign Launch", 
-      description: "We handle negotiations, contracts, and campaign management from start to finish"
-    }
+      number: "03",
+      title: "Campaign launch",
+      description:
+        "We handle negotiations, contracts, and management from start to finish.",
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 text-white py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-700/90 to-purple-700/90"></div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-6 bg-white/10 text-white border-white/20">
+    <div>
+      {/* Hero */}
+      <section className="bg-primary text-primary-foreground">
+        <div className="container mx-auto px-4 py-24 sm:px-6 md:py-32 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="inline-flex items-center rounded-full border border-primary-foreground/25 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary-foreground/80">
               SSENN Subsidiary
-            </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+            </span>
+            <h1 className="mt-7 text-balance text-primary-foreground">
               Connect. Create. Convert.
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-4xl mx-auto mb-12">
-              We bridge the gap between premium brands and top-tier influencers, striving for excellence in all that we do and ensuring that our influence has a meaningful impact on society. We deliver authentic partnerships that drive real results. No guesswork. No wasted budgets. Just strategic influence that works.
+            <p className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-primary-foreground/80 md:text-xl">
+              We bridge the gap between premium brands and top-tier creators,
+              delivering authentic partnerships that drive real results. No
+              guesswork. No wasted budgets. Just strategic influence that works,
+              guided by ihsaan.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="px-8 py-4 bg-white text-blue-700 hover:bg-white/90 font-semibold">
-                <Link to="/contact">
-                  For Brands
-                </Link>
+            <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+              <Button asChild size="lg" variant="secondary">
+                <Link to="/contact">For brands</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="px-8 py-4 border-white/30 text-white hover:bg-white/10 font-semibold">
-                <Link to="/contact">
-                  For Influencers
-                </Link>
+              <Button
+                asChild
+                size="lg"
+                variant="ghost"
+                className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              >
+                <Link to="/contact">For creators</Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Strategic Influence Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900">
-              Why Strategic Influence?
-            </h2>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              We don't just connect brands and influencers—we architect authentic relationships rooted in excellence and deep impact that deliver measurable results for both sides.
-            </p>
-          </div>
+      {/* Why */}
+      <section className="container mx-auto px-4 py-20 text-center sm:px-6 md:py-28 lg:px-8">
+        <div className="mx-auto max-w-3xl">
+          <span className="eyebrow">Why strategic influence</span>
+          <h2 className="mt-5 text-balance">
+            We don't just connect brands and creators.
+          </h2>
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+            We architect authentic relationships, rooted in excellence and real
+            impact, that deliver measurable results for both sides.
+          </p>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {features.map((feature, index) => (
-              <Card key={index} className="border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-                <CardContent className="p-8">
-                  <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <feature.icon className="w-8 h-8 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold mb-4 text-gray-900">{feature.title}</h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-              How It Works
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Three simple steps to launch your next successful campaign
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
-            {steps.map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <span className="text-2xl font-bold text-white">{step.number}</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-4 text-gray-900">{step.title}</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {step.description}
+      {/* Features */}
+      <section className="border-y border-border bg-secondary/40">
+        <div className="container mx-auto px-4 py-20 sm:px-6 md:py-24 lg:px-8">
+          <div className="mx-auto grid max-w-5xl gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
+            {features.map((feature) => (
+              <div key={feature.title} className="bg-card p-8 md:p-10">
+                <feature.icon
+                  className="h-8 w-8 text-primary"
+                  weight="light"
+                />
+                <h3 className="mt-6 text-xl font-semibold">{feature.title}</h3>
+                <p className="mt-3 leading-relaxed text-muted-foreground">
+                  {feature.description}
                 </p>
               </div>
             ))}
@@ -145,33 +126,60 @@ const Ihsaan = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="shadow-elegant bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 text-white border-0">
-            <CardContent className="p-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Ready to Build Authentic Relationships?
-              </h2>
-              <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                Let's discuss how Strategic Influence Ihsaan can help your brand connect with the right influencers for meaningful, results-driven campaigns.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild size="lg" className="px-8 py-4 bg-white text-blue-700 hover:bg-white/90 font-semibold">
-                  <Link to="/contact">
-                    <Mail className="mr-2 h-5 w-5" />
-                    Contact Our Team
-                  </Link>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="px-8 py-4 border-white/30 text-white hover:bg-white/10 font-semibold">
-                  <Link to="/subsidiaries">
-                    <ArrowRight className="mr-2 h-5 w-5" />
-                    Back to Portfolio
-                  </Link>
-                </Button>
+      {/* How it works */}
+      <section className="container mx-auto px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="eyebrow">The process</span>
+          <h2 className="mt-5">How it works</h2>
+          <p className="mt-6 text-lg text-muted-foreground">
+            Three simple steps to launch your next successful campaign.
+          </p>
+        </div>
+
+        <div className="mx-auto mt-16 grid max-w-5xl gap-10 md:grid-cols-3">
+          {steps.map((step) => (
+            <div key={step.number} className="border-t-2 border-primary pt-6">
+              <div className="font-display text-4xl font-semibold text-primary">
+                {step.number}
               </div>
-            </CardContent>
-          </Card>
+              <h3 className="mt-4 text-xl font-semibold">{step.title}</h3>
+              <p className="mt-3 leading-relaxed text-muted-foreground">
+                {step.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="container mx-auto px-4 pb-24 sm:px-6 lg:px-8">
+        <div className="rounded-lg bg-primary px-6 py-16 text-center text-primary-foreground md:px-12">
+          <h2 className="mx-auto max-w-2xl text-balance text-primary-foreground">
+            Ready to build authentic relationships?
+          </h2>
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-primary-foreground/80">
+            Let's discuss how Strategic Influence Ihsaan can connect your brand
+            with the right creators for meaningful, results-driven campaigns.
+          </p>
+          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+            <Button asChild size="lg" variant="secondary">
+              <Link to="/contact">Contact our team</Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="ghost"
+              className="group text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+            >
+              <Link to="/subsidiaries">
+                Back to portfolio
+                <ArrowUpRight
+                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  weight="bold"
+                />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
     </div>

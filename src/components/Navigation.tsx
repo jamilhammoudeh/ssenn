@@ -1,15 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { List, X } from "@phosphor-icons/react";
 
 const Navigation = () => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Subsidiaries", path: "/subsidiaries" },
+    { name: "Initiatives", path: "/subsidiaries" },
     { name: "About", path: "/about" },
     { name: "Shop", path: "/shop" },
     { name: "Contact", path: "/contact" },
@@ -18,94 +17,88 @@ const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-background/80 backdrop-blur-xl border-b border-primary/10 sticky top-0 z-50 shadow-elegant">
+    <nav className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-md">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-4 group">
-            <div className="relative">
-              <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent group-hover:scale-110 transition-all duration-500 ease-out">
+        <div className="flex h-20 items-center justify-between">
+          {/* Wordmark */}
+          <Link to="/" className="flex items-center gap-2.5">
+            <img
+              src="/lovable-uploads/f942f89d-5e0c-4c1b-a325-ebd8a52af9d0.png"
+              alt="SSENN"
+              className="h-9 w-9 object-contain"
+            />
+            <span className="flex items-baseline gap-3">
+              <span className="font-display text-2xl font-semibold tracking-tight text-foreground">
                 SSENN
-              </div>
-              <div className="absolute -inset-1 bg-gradient-primary opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500 rounded-lg"></div>
-            </div>
-            <div className="hidden sm:block">
-              <span className="text-sm text-muted-foreground font-medium tracking-wide">
+              </span>
+              <span className="hidden text-[0.7rem] font-medium uppercase tracking-[0.22em] text-muted-foreground sm:inline">
                 Education Holdings
               </span>
-              <div className="w-full h-px bg-gradient-primary opacity-50 mt-1"></div>
-            </div>
+            </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-10">
+          {/* Desktop navigation */}
+          <div className="hidden items-center gap-9 md:flex">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`relative text-sm font-medium transition-all duration-300 group ${
-                  isActive(item.path)
-                    ? "text-primary font-semibold"
-                    : "text-muted-foreground hover:text-primary"
-                }`}
+                className="group relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground data-[active=true]:text-foreground"
+                data-active={isActive(item.path)}
               >
-                <span className="relative z-10 group-hover:transform group-hover:scale-105 transition-transform duration-300">
-                  {item.name}
-                </span>
-                <div className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-primary transform origin-left transition-all duration-300 ${
-                  isActive(item.path) 
-                    ? "scale-x-100" 
-                    : "scale-x-0 group-hover:scale-x-100"
-                }`}></div>
-                {!isActive(item.path) && (
-                  <div className="absolute -inset-2 bg-primary/5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                )}
+                {item.name}
+                <span
+                  className={`absolute -bottom-1.5 left-0 h-px bg-primary transition-all duration-300 ${
+                    isActive(item.path) ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
               </Link>
             ))}
+            <Button asChild size="sm" className="ml-2">
+              <Link to="/contact">Get in touch</Link>
+            </Button>
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="relative overflow-hidden group"
             >
-              <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
               {isMobileMenuOpen ? (
-                <X className="h-6 w-6 relative z-10 transition-transform duration-300 group-hover:rotate-90" />
+                <X className="h-5 w-5" weight="regular" />
               ) : (
-                <Menu className="h-6 w-6 relative z-10 transition-transform duration-300 group-hover:scale-110" />
+                <List className="h-5 w-5" weight="regular" />
               )}
             </Button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden animate-in slide-in-from-top-2 duration-300">
-            <div className="px-2 pt-4 pb-6 space-y-2 sm:px-3 bg-gradient-card border-t border-primary/10 rounded-b-2xl backdrop-blur-xl">
-              {navItems.map((item, index) => (
+          <div className="border-t border-border/70 pb-6 pt-2 md:hidden">
+            <div className="flex flex-col">
+              {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg group ${
-                    isActive(item.path)
-                      ? "text-primary bg-primary/10 shadow-card"
-                      : "text-muted-foreground hover:text-primary hover:bg-primary/5"
-                  }`}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  style={{ animationDelay: `${index * 50}ms` }}
+                  className={`border-b border-border/40 py-3.5 text-base transition-colors ${
+                    isActive(item.path)
+                      ? "font-medium text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
-                  <span className="relative z-10 group-hover:transform group-hover:translate-x-1 transition-transform duration-300">
-                    {item.name}
-                  </span>
-                  {isActive(item.path) && (
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-primary rounded-r-full"></div>
-                  )}
+                  {item.name}
                 </Link>
               ))}
+              <Button asChild className="mt-5">
+                <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+                  Get in touch
+                </Link>
+              </Button>
             </div>
           </div>
         )}
