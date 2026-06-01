@@ -9,6 +9,7 @@ import {
 } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 
+// Home hero — Revision 1 layout (no-op edit to trigger a deploy)
 const Hero = () => {
   const valueProps = [
     {
